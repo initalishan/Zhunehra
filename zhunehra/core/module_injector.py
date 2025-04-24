@@ -1,2 +1,2 @@
 from telethon import events
-from zhunehra.core.bot import zhunehra
+from zhunehra.core.clients import zhunehra, Call, client
