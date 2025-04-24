@@ -4,6 +4,7 @@ from os import environ
 from dotenv import load_dotenv
 from json import load, dump
 from telethon.tl.functions.photos import GetUserPhotosRequest
+import os
 
 load_dotenv()
 chat_log = int(environ["chat_log"])
@@ -39,3 +40,4 @@ class start:
                     photo = photos.photos[0]
                     file = await zhunehra.download_media(photo, file="db/sender_profile.png")
                 await zhunehra.send_file(chat_log, file=file, caption=f"New user started the bot.\n\nUsername: @{username}\nName: {full_name}\nId: {sender_id}", force_document=False)
+                os.remove(file)

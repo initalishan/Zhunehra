@@ -2,3 +2,5 @@ venv
 .venv
 .env
 __pychache__
+zhunehra.session
+zhunehra.session-journal
