@@ -1,7 +1,6 @@
 from zhunehra.core.module_injector import *
 from zhunehra.core.metadata import meta_data
-from zhunehra.core.download import download
-from zhunehra.core.play import Play_Audio
+from zhunehra.plugins.queue import add_to_queue
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.tl.functions.messages import ExportChatInviteRequest, ImportChatInviteRequest
 from telethon.errors import ChatAdminRequiredError, UserAlreadyParticipantError, InviteHashExpiredError, UserNotParticipantError
@@ -62,19 +61,8 @@ class Play:
                 pass
             if not song_name:
                 return await event.reply("Please provide a audio name or Youtube url after`/play`.")
-
             status = await event.reply("Searching for song...")
-            path = await download(song_name, "m4a", chat_id)
+            await add_to_queue(song_name, chat_id, mention)
             await status.delete()
-            data = await meta_data(song_name, chat_id)
-
-            await zhunehra.send_file(
-                chat_id,
-                file=data[3],
-                caption=f"**{data[0]}**\n\n**Artist:** {data[1]}\n**Duration:** {data[2]}\n**Requested by:** {mention}"
-            )
-            os.remove(data[3])
-            await Play_Audio(chat_id, path)
-            os.remove(path)
         else:
             await event.reply("This command only works in groups.")
