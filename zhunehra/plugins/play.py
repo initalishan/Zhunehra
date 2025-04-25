@@ -18,6 +18,10 @@ class Play:
         global assistant_id
         if event.is_group:
             song_name = event.pattern_match.group(1)
+            try:
+                await event.delete()
+            except Exception:
+                pass
             sender = await event.get_sender()
             mention = f"[{sender.first_name}](tg://user?id={sender.id})"
             chat = await event.get_chat()

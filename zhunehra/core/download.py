@@ -1,25 +1,33 @@
+import re
 from yt_dlp import YoutubeDL
-
-
+    
 async def is_youtube_url(text):
     return text.startswith("http://") or text.startswith("https://")
-
+    
+def sanitize_filename(name):
+    return re.sub(r'[\\/*?:"<>|]', "", name)
+    
 async def download(name, format, chat_id):
-    path = ""
     if format == "m4a":
         options = {
-            "format": "bestaudio[ext=m4a]",
-            "outtmpl": f"db/song_{chat_id}.m4a",
+                "format": "bestaudio[ext=m4a]",
+                "outtmpl": "db/%(title)s.%(ext)s",
+                "noplaylist": True,
+                "quiet": True
         }
-        path = f"db/song_{chat_id}.m4a"
     else:
         options = {
-            "format": "best",
-            "outtmpl": f"db/video_{chat_id}.mp4"
+                "format": "best",
+                "outtmpl": "db/%(title)s.%(ext)s",
+                "noplaylist": True,
+                "quiet": True
         }
-        path = f"db/video_{chat_id}.mp4"
+    
     query = name if await is_youtube_url(name) else f"ytsearch:{name}"
     with YoutubeDL(options) as ydl:
-        ydl.download([query])
-    return path
+        info = ydl.extract_info(query, download=True)
+        if "entries" in info:
+                info = info["entries"][0]
+        downloaded_path = ydl.prepare_filename(info)
         
+    return downloaded_path

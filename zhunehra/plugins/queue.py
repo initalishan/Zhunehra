@@ -20,9 +20,9 @@ async def add_to_queue(song_name, chat_id, mention):
         queue.append(song_name)
         path = await download(queue[queue_position], "m4a", chat_id)
         await Play_Audio(chat_id, path)
-        await Call.change_call_volume(chat_id, 200)
-        os.remove(path)
+        await Call.change_volume_call(chat_id, 200)
         await playing_message(song_name, chat_id)
+        os.remove(path)
     else:
         queue_position += 1
         queue.append(song_name)
@@ -32,16 +32,14 @@ async def play_next(chat_id):
     global queue
     global current_index
     global queue_position
-    print(len(queue))
-    print(current_index)
-    if len(queue) > current_index:
+    if current_index < len(queue):
         path = await download(queue[current_index], "m4a", chat_id)
         print(queue)
+        print(path)
         await Play_Audio(chat_id, path)
-        os.remove(path)
         await playing_message(queue[current_index], chat_id)
         current_index += 1
-        
+        os.remove(path)
     else:
         queue.clear()
         current_index = 0
