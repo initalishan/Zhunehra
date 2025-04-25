@@ -6,10 +6,10 @@ from telethon.tl.functions.messages import ExportChatInviteRequest, ImportChatIn
 from telethon.errors import ChatAdminRequiredError, UserAlreadyParticipantError, InviteHashExpiredError, UserNotParticipantError
 from telethon.tl.types import ChannelParticipantBanned, ChannelParticipantLeft
 from dotenv import load_dotenv 
-import os
+from os import environ
 
 load_dotenv()
-assistant_id = int(os.environ["assistant_id"])
+assistant_id = int(environ["assistant_id"])
 
 class Play:
     @zhunehra.on(events.NewMessage(pattern=r"/play(?:\s+(.*))?"))
@@ -41,7 +41,8 @@ class Play:
                 return await event.reply("Please give me 'Add Users via Link' permission.")
 
             try:
-                participant = await zhunehra(GetParticipantRequest(chat_id, assistant_id))
+                assistant_entity = await client.get_entity("me")
+                participant = await zhunehra(GetParticipantRequest(chat_id, assistant_entity))
                 user_status = participant.participant
                 if isinstance(user_status, (ChannelParticipantBanned, ChannelParticipantLeft)):
                     return await event.reply("Zhunera's Assistant is not in the group or has been banned. Unban or re-add the assistant.")
