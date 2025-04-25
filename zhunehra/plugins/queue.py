@@ -2,6 +2,8 @@ from zhunehra.core.module_injector import *
 from zhunehra.core.play import Play_Audio
 from zhunehra.core.download import download
 from zhunehra.core.metadata import meta_data
+from zhunehra.utils.play import play_buttons
+from zhunehra.utils.queue import queue_buttons
 from pytgcalls import filters
 from pytgcalls.types import Update
 import os
@@ -16,6 +18,7 @@ async def add_to_queue(song_name, chat_id, mention):
     global queue
     global url_mention
     url_mention = mention
+    status = await zhunehra.send_message(chat_id, "🔎")
     if len(queue) < 1:
         queue.append(song_name)
         path = await download(queue[queue_position], "m4a", chat_id)
@@ -24,9 +27,10 @@ async def add_to_queue(song_name, chat_id, mention):
         await playing_message(song_name, chat_id)
         os.remove(path)
     else:
-        queue_position += 1
+        queue_position +=1
         queue.append(song_name)
         await queue_message(song_name, chat_id, queue_position)
+    await status.delete()
         
 async def play_next(chat_id):
     global queue
@@ -58,17 +62,20 @@ async def playing_message(song_name, chat_id):
     await zhunehra.send_file(
         chat_id,
         file=data[3],
-        caption=f"**{data[0]}**\n\n**Artist:** {data[1]}\n**Duration:** {data[2]}\n**Requested by:** {url_mention}"
+        caption=f"**{data[0]}**\n\n**Artist:** {data[1]}\n**Duration:** {data[2]}\n**Requested by:** {url_mention}",
+        buttons=play_buttons
     )
     if data[3] == "db/zhunehra.png":
         pass
     else:
-        os.remove(data[3])
+        if os.path.exists(data[3]):
+            os.remove(data[3])
 async def queue_message(song_name, chat_id, queue_position):
     data = await meta_data(song_name, chat_id)
     await zhunehra.send_message(
         chat_id,
-        f"**Added to queue.**\n\n{data[0]}\n\n**Artist:** {data[1]}\n**Duration:** {data[2]}\n**Queue Position:** #{queue_position}"
+        f"**Added to queue.**\n\n{data[0]}\n\n**Artist:** {data[1]}\n**Duration:** {data[2]}\n**Queue Position:** #{queue_position}",
+        buttons=queue_buttons
     )
     if data[3] == "db/zhunehra.png":
         pass
