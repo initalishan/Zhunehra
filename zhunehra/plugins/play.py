@@ -54,6 +54,23 @@ class Play:
                             embed_links=False,
                         )
                         await zhunehra(EditBannedRequest(chat_id, assistant_id, rights))
+                        try:
+                            me = await zhunehra.get_me()
+                            owner = await zhunehra(GetParticipantRequest(chat_id, me.id))
+                            if isinstance(owner.participant, ChannelParticipantAdmin):
+                                admin_rights = owner.participant.admin_rights
+                                if admin_rights.invite_users:
+                                    result = await zhunehra(ExportChatInviteRequest(chat_id))
+                                    invite_link = result.link
+                                    invite_hash = invite_link.split("/")[-1].replace("+", "")
+                                    await client(ImportChatInviteRequest(invite_hash))
+                                    await client.send_message(chat_id, "I have joined the group.")
+                                else:
+                                    return await event.reply("Zhunehra can't invite the assistant (no rights).")
+                        except ChatAdminRequiredError:
+                            return await event.reply("Zhunehra is not an admin in this group.")
+                        except Exception as e:
+                            return await event.reply(f"Failed to invite assistant:\n`{e}`")
                         await event.reply("Assistant was banned, unbanned successfully.")
                     else:
                         return await event.reply("Zhunehra has no access to unban the assistant.")
