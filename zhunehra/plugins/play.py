@@ -1,8 +1,9 @@
 from zhunehra.core.module_injector import *
 from zhunehra.plugins.queue import add_to_queue
-from telethon.tl.functions.channels import GetParticipantRequest, EditBannedRequest
+from telethon.tl.functions.channels import GetParticipantRequest, EditBannedRequest, GetFullChannelRequest
 from telethon.tl.functions.messages import ExportChatInviteRequest, ImportChatInviteRequest
-from telethon.errors import UserNotParticipantError, ChatAdminRequiredError
+from telethon.tl.functions.phone import GetGroupCallRequest
+from telethon.errors import UserNotParticipantError, ChatAdminRequiredError, RPCError
 from telethon.tl.types import (
     ChannelParticipantAdmin, ChannelParticipantBanned, ChannelParticipantLeft,
     ChatBannedRights
@@ -75,4 +76,8 @@ class Play:
                 return await event.reply(f"Failed to invite assistant:\n`{e}`")
         except Exception as e:
             return await event.reply(f"Unexpected error:\n`{e}`")
+        full_channel = await zhunehra(GetFullChannelRequest(chat_id))
+        call = full_channel.full_chat.call
+        if not call:
+            return await event.reply("Voice chat is not active.")
         await add_to_queue(song_name, chat_id, mention)
