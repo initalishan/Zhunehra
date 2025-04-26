@@ -3,8 +3,8 @@ from PIL import Image
 import os
 
 async def meta_data(song_name, chat_id):
-    title = ""
-    artist = ""
+    title = "Unknown Title"
+    artist = "Unknown Artist"
     raw_duration = 0
     display_duration = "0:00"
     thumbnail = f"db/thumb_{chat_id}"
@@ -14,10 +14,15 @@ async def meta_data(song_name, chat_id):
         "writethumbnail": True,
         "outtmpl": thumbnail
     }
+
     with YoutubeDL(options) as ydl:
         try:
             result = ydl.extract_info(f"ytsearch:{song_name}", download=True)
-            info = result["entries"][0]
+            entries = result.get("entries", [])
+            if not entries:
+                raise Exception("No results found for the query.")
+            
+            info = entries[0]
             title = info.get("title", "Unknown Title")
             artist = info.get("uploader", "Unknown Artist")
             raw_duration = info.get("duration", 0)
@@ -28,23 +33,38 @@ async def meta_data(song_name, chat_id):
                 raw_duration = 0
 
         except Exception as e:
-            print("Error in YDL:", e)
+            print(f"[Metadata Error] {e}")
 
     path = f"{thumbnail}.webp"
-    if os.path.exists(path):
-        img = Image.open(path)
-        thumbnail = path.replace(".webp", ".png")
-        img.save(thumbnail, "PNG")
+    final_thumbnail = "db/zhunehra.png"  # default fallback
+
+    try:
+        if os.path.exists(path):
+            img = Image.open(path)
+            final_thumbnail = path.replace(".webp", ".png")
+            img.save(final_thumbnail, "PNG")
+        else:
+            fallback_jpg = f"db/thumb_{chat_id}.jpg"
+            if os.path.exists(fallback_jpg):
+                final_thumbnail = fallback_jpg
+    except Exception as e:
+        print(f"[Thumbnail Error] {e}")
+
+    # Clean up .webp file if exists
+    try:
+        if os.path.exists(f"db/thumb_{chat_id}.webp"):
+            os.remove(f"db/thumb_{chat_id}.webp")
+    except Exception as e:
+        print(f"[Cleanup Error] {e}")
+
+    # Final smart duration formatting
+    if raw_duration >= 3600:  # more than or equal to 1 hour
+        hours, remainder = divmod(raw_duration, 3600)
+        minutes, secs = divmod(remainder, 60)
+        display_duration = f"{hours}:{minutes:02}:{secs:02}"
     else:
-        thumbnail = f"db/thumb_{chat_id}.jpg"
-        if not os.path.exists(thumbnail):
-            thumbnail = "db/zhunehra.png"
+        minutes, secs = divmod(raw_duration, 60)
+        display_duration = f"{minutes}:{secs:02}"
 
-    minutes, secs = divmod(raw_duration, 60)
-    display_duration = f"{minutes}:{secs:02}"
-
-    if os.path.exists(f"db/thumb_{chat_id}.webp"):
-        os.remove(f"db/thumb_{chat_id}.webp")
-
-    data = [title, artist, display_duration, thumbnail]
+    data = [title, artist, display_duration, final_thumbnail]
     return data

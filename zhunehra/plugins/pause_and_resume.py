@@ -5,11 +5,14 @@ is_playing = True
 
 @zhunehra.on(events.NewMessage(pattern=r"\/pause"))
 async def pause_handler(event):
-    await event.delete()
-    await pause(event)
+    if event.is_group:
+        await event.delete()
+        await pause(event)
+    else:
+        await event.reply("This command only for groups.")
     
 @zhunehra.on(events.CallbackQuery(data=b"pause"))
-async def resume_callback(event):
+async def pause_callback(event):
     await pause(event)
     
 async def pause(event):
@@ -24,10 +27,13 @@ async def pause(event):
     else:
         await event.respond(f"**Stream is already paused**: {mention}.")
         
-zhunehra.on(events.NewMessage(pattern=r"\/resume"))
+@zhunehra.on(events.NewMessage(pattern=r"\/resume"))
 async def resume_handler(event):
-    await event.delete()
-    await resume(event)
+    if event.is_group:
+        await event.delete()
+        await resume(event)
+    else:
+        await event.reply("This command only for groups.")
     
 @zhunehra.on(events.CallbackQuery(data=b"resume"))
 async def resume_callback(event):

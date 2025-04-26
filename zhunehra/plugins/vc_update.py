@@ -11,5 +11,3 @@ async def on_call_ended(_, update: Update):
         current_ind.pop(chat_id, None)
         queue_position.pop(chat_id, None)
         await zhunehra.send_message(chat_id, "Voice chat ended. Queue cleared.")
-    else:
-        await zhunehra.send_message(chat_id, "Voice chat ended.")

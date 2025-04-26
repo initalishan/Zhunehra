@@ -25,23 +25,25 @@ async def add_to_queue(song_name, chat_id, mention):
             queue_position[chat_id] = 0
             current_ind[chat_id] = 0
             current_playing_index[chat_id] = 0
-        
-        if len(queues[chat_id]) < 1:
-            queues[chat_id].append((song_name, mention))
-            path = await download(queues[chat_id][0][0], "m4a", chat_id)
-            await Play_Audio(chat_id, path)
-            await Call.change_volume_call(chat_id, 200)
-            await playing_message(song_name, chat_id, mention)
-            os.remove(path)
-        else:
-            queue_position[chat_id] += 1
-            queues[chat_id].append((song_name, mention))
-            await queue_message(song_name, chat_id, queue_position[chat_id], mention)
+        try:
+            if len(queues[chat_id]) < 1:
+                queues[chat_id].append((song_name, mention))
+                path = await download(queues[chat_id][0][0], "m4a", chat_id)
+                await Play_Audio(chat_id, path)
+                await Call.change_volume_call(chat_id, 200)
+                await playing_message(song_name, chat_id, mention)
+                os.remove(path)
+            else:
+                queue_position[chat_id] += 1
+                queues[chat_id].append((song_name, mention))
+                await queue_message(song_name, chat_id, queue_position[chat_id], mention)
+        except Exception as e:
+            await zhunehra.send_message(chat_id, str(e))
 
         await status.delete()
 
 async def play_next(chat_id):
-    if chat_id not in queues or current_ind.get(chat_id, 0) >= len(queues[chat_id]):
+    if chat_id not in queues or not queues[chat_id]:
         await Call.leave_call(chat_id)
         await zhunehra.send_message(chat_id, "Queue finished, Leaving voice chat.")
         queues.pop(chat_id, None)
@@ -49,13 +51,27 @@ async def play_next(chat_id):
         current_ind.pop(chat_id, None)
         current_playing_index.pop(chat_id, None)
         return
+    current_ind[chat_id] = current_ind.get(chat_id, 0) + 1
+    if current_ind[chat_id] >= len(queues[chat_id]):
+        await Call.leave_call(chat_id)
+        await zhunehra.send_message(chat_id, "Queue finished, Leaving voice chat.")
+        queues.pop(chat_id, None)
+        queue_position.pop(chat_id, None)
+        current_ind.pop(chat_id, None)
+        current_playing_index.pop(chat_id, None)
+        return
+    try:
+        index = current_ind[chat_id]
+        current_playing_index[chat_id] = index
+        song_name, mention = queues[chat_id][index]
+        path = await download(song_name, "m4a", chat_id)
+        await Play_Audio(chat_id, path)
+        await playing_message(song_name, chat_id, mention)
+    except Exception as e:
+        await zhunehra.send_message(chat_id, str(e))
+    if os.path.exists(path):
+        os.remove(path)
 
-    path = await download(queues[chat_id][current_ind[chat_id]][0], "m4a", chat_id)
-    await Play_Audio(chat_id, path)
-    current_playing_index[chat_id] = current_ind[chat_id]
-    await playing_message(queues[chat_id][current_ind[chat_id]][0], chat_id, queues[chat_id][current_ind[chat_id]][1])
-    current_ind[chat_id] += 1
-    os.remove(path)
 
 @Call.on_update(filters.stream_end())
 async def stream_end(_, update: Update):
@@ -91,9 +107,11 @@ async def replay(event):
 
     if chat_id in queues and len(queues[chat_id]) > 0:
         status = await event.reply("**Replaying...**")
-        path = await download(queues[chat_id][current_playing_index[chat_id]][0], "m4a", chat_id)
+        index = current_playing_index.get(chat_id, 0)
+        song_name, requested_by = queues[chat_id][index]
+        path = await download(song_name, "m4a", chat_id)
         await Play_Audio(chat_id, path)
-        await playing_message(queues[chat_id][current_playing_index[chat_id]][0], chat_id, mention)
+        await playing_message(song_name, chat_id, requested_by)
         await status.edit(f"**Replay Started.\nReplay by:** {mention}")
         os.remove(path)
     else:

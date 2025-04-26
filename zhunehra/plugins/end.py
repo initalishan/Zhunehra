@@ -3,11 +3,17 @@ from zhunehra.plugins.queue import queues, current_ind, queue_position
 
 @zhunehra.on(events.NewMessage(pattern=r"\/stop"))
 async def stop_handler(event):
-    await stop_song(event)
+    if event.is_group:
+        await stop_song(event)
+    else:
+        await event.reply("This command only for groups.")
 
 @zhunehra.on(events.NewMessage(pattern=r"\/end"))
 async def end_handler(event):
-    await stop_song(event)
+    if event.is_group:
+        await stop_song(event)
+    else:
+        await event.reply("This command only for groups.")
 
 @zhunehra.on(events.CallbackQuery(data=b"stop"))
 async def callback_stop(event):

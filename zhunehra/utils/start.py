@@ -8,3 +8,12 @@ start_buttons = [
         Button.url("Channel", "https://t.me/zhunehra")
         ],
     ]
+start_group_buttons = [
+    [
+        Button.url("Start Zhunehra", "https://t.me/zhunehra_bot?start=groupstart")
+    ],
+    [
+        Button.url("Report", "https://t.me/zhunehra_chat"),
+        Button.url("Channel", "https://t.me/zhunehra")
+    ]
+]
