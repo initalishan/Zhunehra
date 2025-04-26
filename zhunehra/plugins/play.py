@@ -2,16 +2,12 @@ from zhunehra.core.module_injector import *
 from zhunehra.plugins.queue import add_to_queue
 from telethon.tl.functions.channels import GetParticipantRequest, EditBannedRequest, GetFullChannelRequest
 from telethon.tl.functions.messages import ExportChatInviteRequest, ImportChatInviteRequest
-from telethon.tl.functions.phone import GetGroupCallRequest
-from telethon.errors import UserNotParticipantError, ChatAdminRequiredError, RPCError
-from telethon.tl.types import (
-    ChannelParticipantAdmin, ChannelParticipantBanned, ChannelParticipantLeft,
-    ChatBannedRights
-)
+from telethon.errors import UserNotParticipantError, ChatAdminRequiredError
+from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantBanned, ChatBannedRights, InputPeerUser
 from telethon import events
 from dotenv import load_dotenv
 from os import environ
-
+ 
 load_dotenv()
 assistant_id = int(environ["assistant_id"])
 
@@ -28,12 +24,17 @@ class Play:
             return await event.reply("Please provide a song name or YouTube URL after `/play`.")
         try:
             await event.delete()
-        except Exception:
+        except Exception: 
             pass
         chat = await event.get_chat()
         chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
         try:
-            result = await zhunehra(GetParticipantRequest(chat_id, assistant_id))
+            try:
+                assistant = await zhunehra.get_input_entity(assistant_id)
+            except Exception:
+                assistant_user = await client.get_entity(assistant_id)
+                assistant = InputPeerUser(assistant_user.id, assistant_user.access_hash)
+            result = await zhunehra(GetParticipantRequest(chat_id, assistant))
             assistant_status = result.participant
             if isinstance(assistant_status, ChannelParticipantBanned):
                 me = await zhunehra.get_me()
