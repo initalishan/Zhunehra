@@ -23,7 +23,8 @@ async def download(name, format, chat_id):
                 "quiet": True
         }
     
-    query = name if await is_youtube_url(name) else f"ytsearch:{name}"
+    song_name = name[0] if isinstance(name, tuple) else name
+    query = song_name if await is_youtube_url(song_name) else f"ytsearch:{song_name}"
     with YoutubeDL(options) as ydl:
         info = ydl.extract_info(query, download=True)
         if "entries" in info:
