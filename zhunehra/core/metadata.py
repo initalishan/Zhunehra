@@ -31,7 +31,6 @@ async def meta_data(song_name, chat_id):
             title = info.get("title", "Unknown Title")
             artist = info.get("uploader", "Unknown Artist")
             raw_duration = info.get("duration", 0)
-
             try:
                 raw_duration = int(raw_duration)
             except (ValueError, TypeError):
@@ -54,16 +53,13 @@ async def meta_data(song_name, chat_id):
                 final_thumbnail = fallback_jpg
     except Exception as e:
         print(f"[Thumbnail Error] {e}")
-
-    # Clean up .webp file if exists
     try:
         if os.path.exists(f"db/thumb_{chat_id}.webp"):
             os.remove(f"db/thumb_{chat_id}.webp")
     except Exception as e:
         print(f"[Cleanup Error] {e}")
 
-    # Final smart duration formatting
-    if raw_duration >= 3600:  # more than or equal to 1 hour
+    if raw_duration >= 3600:
         hours, remainder = divmod(raw_duration, 3600)
         minutes, secs = divmod(remainder, 60)
         display_duration = f"{hours}:{minutes:02}:{secs:02}"

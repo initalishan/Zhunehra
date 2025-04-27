@@ -5,7 +5,7 @@ start_group_caption="**Welcome to Zhunehra!**\n\nA powerful music bot to stream 
 user_log_caption="Congratulations.\nNew user started Zhunehra.\n\nUsername: @{username}\nName: {full_name}\nId: {sender_id}"
 
 group_log_caption="Congratulations.\nZhunehra has been added to one more group.\n\nusername: @{username}\nName: {full_name}\nId: {chat_id}"
-help_caption="**Zhunehra's Help Menu**\n\nChoose the category you want tk help with **Zhunehra.**\n\nAny problem ask your doubts at **[Zhunehar's Chat](https://t.me/zhunehra_chat)**."
+help_caption="**Zhunehra's Help Menu**\n\nChoose the category you want to help with **Zhunehra.**\n\nAny problem ask your doubts at **[Zhunehar's Chat](https://t.me/zhunehra_chat)**."
 
 
 command_caption="**Zhunehra's Command Center**.\n\nHere's your complete list of available commands.\n\n**Tap any button below to see details.**"
