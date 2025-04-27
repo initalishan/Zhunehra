@@ -2,6 +2,10 @@ from yt_dlp import YoutubeDL
 from PIL import Image
 import os
 
+
+async def is_youtube_url(text):
+    return text.startswith("http://") or text.startswith("https://")
+    
 async def meta_data(song_name, chat_id):
     title = "Unknown Title"
     artist = "Unknown Artist"
@@ -17,7 +21,8 @@ async def meta_data(song_name, chat_id):
 
     with YoutubeDL(options) as ydl:
         try:
-            result = ydl.extract_info(f"ytsearch:{song_name}", download=True)
+            query = song_name if await is_youtube_url(song_name) else f"ytsearch:{song_name}"
+            result = ydl.extract_info(query, download=True)
             entries = result.get("entries", [])
             if not entries:
                 raise Exception("No results found for the query.")
