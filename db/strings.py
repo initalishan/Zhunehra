@@ -1,14 +1,14 @@
-start_caption="Hey there, [{full_name}](tg://user?id={sender_id}),\n\nWelcome to **[Zhunehra](https://t.me/zhunehra_bot)** your group's personal music DJ.\n\nWith me you can:**\n- Download audio and videos from Youtube using link or name.\n- Play them live in group voice chat.\n- Use powerful commands to control the stream.**\n\nPress the given help button below to get more informention."
+start_caption="Hey there, [{full_name}](tg://user?id={sender_id}),\n\nWelcome to **[Zhunehra](https://t.me/zhunehra_bot)** your group's personal music DJ.\n\nWith me you can:**\n- Download audio and videos from Youtube using link or name.\n- Play them live in group voice chat.\n- Use powerful commands to control the stream.**\n\nPress the given help button below to get more information."
 
 start_group_caption="**Welcome to Zhunehra!**\n\nA powerful music bot to stream songs and control voice chats easily.\nStay updated with our latest news and report any issues if needed."
 
 user_log_caption="Congratulations.\nNew user started Zhunehra.\n\nUsername: @{username}\nName: {full_name}\nId: {sender_id}"
 
-group_log_caption="Congratulations.\nZhunehra has added to one more group.\n\nusername: @{username}\nName: {full_name}\nId: {chat_id}"
+group_log_caption="Congratulations.\nZhunehra has been added to one more group.\n\nusername: @{username}\nName: {full_name}\nId: {chat_id}"
+help_caption="**Zhunehra's Help Menu**\n\nChoose the category you want tk help with **Zhunehra.**\n\nAny problem ask your doubts at **[Zhunehar's Chat](https://t.me/zhunehra_chat)**."
 
-help_caption="**Zhunehra's Help Menu**\n\nChoose the category for which you wanna get help.\n\nAny problem ask your doubt at **[Zhunehar's Chat](https://t.me/zhunehra_chat)**."
 
-command_caption="**Zhunehra's Command Center**.\n\nHere's your complete list of awailable commands.\n\n**Tap any button below to see details.**"
+command_caption="**Zhunehra's Command Center**.\n\nHere's your complete list of available commands.\n\n**Tap any button below to see details.**"
 
 about_zhunehra_caption="**Zhunehra Bot Details.**\n\n**Libraries:**\n[PyTgCalls](https://github.com/pytgcalls/pytgcalls).\n[yt-dlp](https://github.com/yt-dlp/yt-dlp).\n[Telethon](https://docs.telethon.dev/).\n\n**Built With:**\nPython 3.13.3.\n\n**Main Features:**\nPlay music in group voice chats.\nDownload audio & video from Youtube.\nFast and stable streaming.\n\n**Hosted On:**\nPrivate VPS."
 

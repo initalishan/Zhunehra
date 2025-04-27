@@ -42,8 +42,6 @@ async def download(name, format, chat_id):
         duration = info.get("duration", 0)
         if duration > max_duration:
             raise Exception(f"Video too long! Max allowed duration is {max_duration//60} minutes.")
-
-        # ab safe hai download karna
         info = ydl.extract_info(query, download=True)
         if "entries" in info:
             info = info["entries"][0]

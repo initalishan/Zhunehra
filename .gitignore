@@ -1,6 +1,6 @@
 venv
 .venv
 .env
-__pychache__
+__pycache__
 zhunehra.session
 zhunehra.session-journal
