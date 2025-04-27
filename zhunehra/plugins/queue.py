@@ -6,7 +6,7 @@ from zhunehra.utils.play import play_buttons
 from zhunehra.utils.queue import queue_buttons
 from pytgcalls import filters
 from pytgcalls.types import Update
-from os import path, remove
+import os
 from asyncio import Lock
 
 queue_lock = Lock()
@@ -28,8 +28,8 @@ async def add_to_queue(song_name, chat_id, format, mention):
                 await Play_Audio(chat_id, path)
                 await Call.change_volume_call(chat_id, 200)
                 await playing_message(song_name, chat_id, mention)
-                if path.exists(path):
-                    remove(path)
+                if os.path.exists(path):
+                    os.remove(path)
             else:
                 queue_position[chat_id] += 1
                 await queue_message(song_name, chat_id, queue_position[chat_id], mention)
@@ -59,12 +59,12 @@ async def play_next(chat_id):
             return
         
         try:
-            song_name, mention, format = queues[chat_id][index][index]
+            song_name, mention, format = queues[chat_id][index]
             path = await download(song_name, format, chat_id)
             await Play_Audio(chat_id, path)
             await playing_message(song_name, chat_id, mention)
-            if path.exists(path):
-                remove(path)
+            if os.path.exists(path):
+                os.remove(path)
         except Exception as e:
             await zhunehra.send_message(chat_id, f"Error: {str(e)}")
 
@@ -83,8 +83,8 @@ async def playing_message(song_name, chat_id, mention):
         caption=f"**{title}**\n\n**Artist:** {artist}\n**Duration:** {duration_text}\n**Requested by:** {mention}",
         buttons=play_buttons
     )
-    if thumbnail != "db/zhunehra.png" and path.exists(thumbnail):
-        remove(thumbnail)
+    if thumbnail != "db/zhunehra.png" and os.path.exists(thumbnail):
+        os.remove(thumbnail)
 
 async def queue_message(song_name, chat_id, queue_pos, mention):
     data = await meta_data(song_name, chat_id)
@@ -95,8 +95,8 @@ async def queue_message(song_name, chat_id, queue_pos, mention):
         buttons=queue_buttons
     )
 
-    if thumbnail != "db/zhunehra.png" and path.exists(thumbnail):
-        remove(thumbnail)
+    if thumbnail != "db/zhunehra.png" and os.path.exists(thumbnail):
+        os.remove(thumbnail)
 async def replay(event):
     user = await event.get_sender()
     mention = f"[{user.first_name}](tg://user?id={user.id})"
@@ -105,7 +105,7 @@ async def replay(event):
     if chat_id in queues and queues[chat_id]:
         status = await event.reply("**Replaying current track...**")
         index = current_ind.get(chat_id, 0)
-        song_name, requested_by, format = queues[chat_id][index][index]
+        song_name, requested_by, format = queues[chat_id][index]
         try:
             path = await download(song_name, format, chat_id)
             await Play_Audio(chat_id, path)
@@ -114,7 +114,7 @@ async def replay(event):
         except Exception as e:
             await status.edit(f"Replay failed: {str(e)}")
         finally:
-            if path.exists(path):
-                remove(path)
+            if os.path.exists(path):
+                os.remove(path)
     else:
         await event.reply(f"**Nothing is playing to replay,** {mention}.")
