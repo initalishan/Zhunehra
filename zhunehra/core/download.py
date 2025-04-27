@@ -34,7 +34,6 @@ async def download(name, format, chat_id):
         info = ydl.extract_info(query, download=True)
         if "entries" in info:
             info = info["entries"][0]
-
         downloaded_path = ydl.prepare_filename(info)
         
     return downloaded_path

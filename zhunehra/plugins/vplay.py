@@ -11,22 +11,18 @@ from os import environ
 load_dotenv()
 assistant_id = int(environ["assistant_id"])
 
-class Play:
-    @zhunehra.on(events.NewMessage(pattern=r"\/play(?:@[\w]+)?(?:\s+(.+))?"))
-    async def play_handler(event):
+class VPlay:
+    @zhunehra.on(events.NewMessage(pattern=r"\/vplay(?:@[\w]+)?(?:\s+(.+))?"))
+    async def vplay_handler(event):
         global assistant_id
-        format = "m4a"
-        mention = ""
+        format = "mp4"
         user = await event.get_sender()
-        try:
-            mention = f"[{user.first_name}](tg://user?id={user.id})"
-        except Exception:
-            mention = "anonymous"
+        mention = f"[{user.first_name}](tg://user?id={user.id})"
         if not event.is_group:
             return await event.reply("This command works only in groups.")
         song_name = event.pattern_match.group(1)
         if not song_name:
-            return await event.reply("Please provide a song name or YouTube URL after `/play`.")
+            return await event.reply("Please provide a Video name or YouTube URL after `/play`.")
         try:
             await event.delete()
         except Exception: 

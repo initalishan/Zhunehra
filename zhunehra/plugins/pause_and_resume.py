@@ -6,8 +6,11 @@ is_playing = True
 @zhunehra.on(events.NewMessage(pattern=r"\/pause"))
 async def pause_handler(event):
     if event.is_group:
-        await event.delete()
-        await pause(event)
+        try:
+            await event.delete()
+            await pause(event)
+        except Exception:
+            pass
     else:
         await event.reply("This command only for groups.")
     
@@ -30,8 +33,11 @@ async def pause(event):
 @zhunehra.on(events.NewMessage(pattern=r"\/resume"))
 async def resume_handler(event):
     if event.is_group:
-        await event.delete()
-        await resume(event)
+        try:
+            await event.delete()
+            await resume(event)
+        except Exception:
+            pass
     else:
         await event.reply("This command only for groups.")
     

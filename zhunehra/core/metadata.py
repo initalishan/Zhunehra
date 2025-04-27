@@ -1,6 +1,6 @@
 from yt_dlp import YoutubeDL
 from PIL import Image
-import os
+from os import path, remove
 
 
 async def is_youtube_url(text):
@@ -40,22 +40,22 @@ async def meta_data(song_name, chat_id):
             print(f"[Metadata Error] {e}")
 
     path = f"{thumbnail}.webp"
-    final_thumbnail = "db/zhunehra.png"  # default fallback
+    final_thumbnail = "db/zhunehra.png"
 
     try:
-        if os.path.exists(path):
+        if path.exists(path):
             img = Image.open(path)
             final_thumbnail = path.replace(".webp", ".png")
             img.save(final_thumbnail, "PNG")
         else:
             fallback_jpg = f"db/thumb_{chat_id}.jpg"
-            if os.path.exists(fallback_jpg):
+            if path.exists(fallback_jpg):
                 final_thumbnail = fallback_jpg
     except Exception as e:
         print(f"[Thumbnail Error] {e}")
     try:
-        if os.path.exists(f"db/thumb_{chat_id}.webp"):
-            os.remove(f"db/thumb_{chat_id}.webp")
+        if path.exists(f"db/thumb_{chat_id}.webp"):
+            remove(f"db/thumb_{chat_id}.webp")
     except Exception as e:
         print(f"[Cleanup Error] {e}")
 

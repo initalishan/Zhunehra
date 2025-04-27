@@ -50,7 +50,10 @@ class start:
                 buttons=start_buttons,
                 parse_mode="md"
                 )
-            await status.delete()
+            try:
+                await status.delete()
+            except Exception:
+                pass
             try:
                 with open("db/users.json", "r") as f:
                     users = load(f)
@@ -79,7 +82,10 @@ class start:
                 start_group_caption,
                 buttons=start_group_buttons
             )
-            await status.delete()
+            try:
+                await status.delete()
+            except Exception:
+                pass
             try:
                 with open("db/groups.json", "r") as f:
                     groups = load(f)

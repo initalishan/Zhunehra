@@ -8,8 +8,11 @@ async def skip_handler(event):
         mention = f"[{user.first_name}](tg://user?id={user.id})"
         chat_id = event.chat_id
         status = await event.reply("**Skiping..**")
-        await play_next(chat_id)
-        await event.delete()
+        try:
+            await play_next(chat_id)
+            await event.delete()
+        except Exception:
+            pass
         await status.edit(f"**Skiped succesfully.\nSkiped by:** {mention}")
     else:
         await event.reply("This command only for groups.")
@@ -20,6 +23,9 @@ async def callback_skip(event):
     mention = f"[{user.first_name}](tg://user?id={user.id})"
     chat_id = event.chat_id
     status = await event.reply("**Skiping..**")
-    await play_next(chat_id)
-    await event.delete()
+    try:
+        await play_next(chat_id)
+        await event.delete()
+    except Exception:
+        pass
     await status.edit(f"**Skiped succesfully.\nSkiped by:** {mention}")
