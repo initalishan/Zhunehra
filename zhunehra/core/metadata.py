@@ -1,8 +1,8 @@
 from yt_dlp import YoutubeDL
 from PIL import Image
-from os import path, remove
+import os
 
-
+cookie = "cookie/cookie.txt"
 async def is_youtube_url(text):
     return text.startswith("http://") or text.startswith("https://")
     
@@ -14,6 +14,7 @@ async def meta_data(song_name, chat_id):
     thumbnail = f"db/thumb_{chat_id}"
     options = {
         "quiet": True,
+        "cookiefile": cookie,
         "skip_download": True,
         "writethumbnail": True,
         "outtmpl": thumbnail
@@ -43,19 +44,19 @@ async def meta_data(song_name, chat_id):
     final_thumbnail = "db/zhunehra.png"
 
     try:
-        if path.exists(path):
+        if os.path.exists(path):
             img = Image.open(path)
             final_thumbnail = path.replace(".webp", ".png")
             img.save(final_thumbnail, "PNG")
         else:
             fallback_jpg = f"db/thumb_{chat_id}.jpg"
-            if path.exists(fallback_jpg):
+            if os.path.exists(fallback_jpg):
                 final_thumbnail = fallback_jpg
     except Exception as e:
         print(f"[Thumbnail Error] {e}")
     try:
-        if path.exists(f"db/thumb_{chat_id}.webp"):
-            remove(f"db/thumb_{chat_id}.webp")
+        if os.path.exists(f"db/thumb_{chat_id}.webp"):
+            os.remove(f"db/thumb_{chat_id}.webp")
     except Exception as e:
         print(f"[Cleanup Error] {e}")
 

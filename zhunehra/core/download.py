@@ -2,6 +2,8 @@ import re
 import os
 from yt_dlp import YoutubeDL
 
+cookie = "cookie/cookie.txt"
+
 async def is_youtube_url(text):
     return text.startswith("http://") or text.startswith("https://")
 
@@ -12,6 +14,7 @@ async def download(name, format, chat_id):
     if format == "m4a":
         options = {
             "format": "bestaudio[ext=m4a]",
+            "cookiefile": cookie,
             "outtmpl": "db/%(title)s.%(ext)s",
             "noplaylist": True,
             "quiet": True
@@ -19,6 +22,7 @@ async def download(name, format, chat_id):
     else:
         options = {
             "format": "best",
+            "cookiefile": cookie,
             "outtmpl": "db/%(title)s.%(ext)s",
             "noplaylist": True,
             "quiet": True
