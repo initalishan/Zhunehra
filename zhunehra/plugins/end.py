@@ -30,13 +30,17 @@ async def callback_stop(event):
 
 async def stop_song(event):
     user = await event.get_sender()
-    mention = f"[{user.first_name}](tg://user?id={user.id})"
+    try:
+        mention = f"[{user.first_name}](tg://user?id={user.id})"
+    except Exception:
+        mention = "Anonymous"
     try:
         await event.delete()
     except Exception:
         pass
     
-    chat_id = event.chat_id
+    chat = await event.get_chat()
+    chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
     if chat_id in queues and len(queues[chat_id]) > 0:
         queues.pop(chat_id, None)
         queue_position.pop(chat_id, None)

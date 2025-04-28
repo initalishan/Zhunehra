@@ -5,8 +5,12 @@ from zhunehra.plugins.queue import play_next
 async def skip_handler(event):
     if event.is_group:
         user = await event.get_sender()
-        mention = f"[{user.first_name}](tg://user?id={user.id})"
-        chat_id = event.chat_id
+        try:
+            mention = f"[{user.first_name}](tg://user?id={user.id})"
+        except Exception:
+            mention = "Anonymous"
+        chat = await event.get_chat()
+        chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
         status = await event.reply("**Skiping..**")
         try:
             await play_next(chat_id)

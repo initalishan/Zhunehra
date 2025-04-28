@@ -70,7 +70,8 @@ async def play_next(chat_id):
 
 @Call.on_update(filters.stream_end())
 async def stream_end(_, update: Update):
-    chat_id = update.chat_id
+    chat = update.chat_id
+    chat_id = int(f"-100{chat}" if not str(chat).startswith("-100") else chat)
     if chat_id in queues:
         await play_next(chat_id)
         
@@ -99,8 +100,12 @@ async def queue_message(song_name, chat_id, queue_pos, mention):
         os.remove(thumbnail)
 async def replay(event):
     user = await event.get_sender()
-    mention = f"[{user.first_name}](tg://user?id={user.id})"
-    chat_id = event.chat_id
+    try:
+        mention = f"[{user.first_name}](tg://user?id={user.id})"
+    except Exception:
+        mention = "ANonymous"
+    chat = await event.get_chat()
+    chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
 
     if chat_id in queues and queues[chat_id]:
         status = await event.reply("**Replaying current track...**")

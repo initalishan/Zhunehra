@@ -5,7 +5,8 @@ from pytgcalls.types import ChatUpdate, Update
 
 @Call.on_update(filters.chat_update(ChatUpdate.Status.LEFT_CALL))
 async def on_call_ended(_, update: Update):
-    chat_id = update.chat_id
+    chat = update.chat_id
+    chat_id = int(f"-100{chat}" if not str(chat).startswith("-100") else chat)
     if chat_id in queues and len(queues[chat_id]) > 0:
         queues.pop(chat_id, None)
         current_ind.pop(chat_id, None)

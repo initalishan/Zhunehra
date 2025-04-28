@@ -20,9 +20,13 @@ async def pause_callback(event):
     
 async def pause(event):
     global is_playing
-    chat_id = event.chat_id
+    chat = await event.get_chat()
+    chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
     user = await event.get_sender()
-    mention = f"[{user.first_name}](tg://user?id={user.id})"
+    try:
+        mention = f"[{user.first_name}](tg://user?id={user.id})"
+    except Exception:
+        mention = "Anonymous"
     if is_playing:
         await Call.pause(chat_id)
         is_playing = False
@@ -47,9 +51,13 @@ async def resume_callback(event):
     
 async def resume(event):
     global is_playing
-    chat_id = event.chat_id
+    chat = await event.get_chat()
+    chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
     user = await event.get_sender()
-    mention = f"[{user.first_name}](tg://user?id={user.id})"
+    try:
+        mention = f"[{user.first_name}](tg://user?id={user.id})"
+    except Exception:
+        mention =  "Anonymous"
     if not is_playing:
         await Call.resume(chat_id)
         is_playing = True
