@@ -23,7 +23,7 @@ class Download:
                 await event.reply("Please provide a name or YouTube URL after `/download`.")
                 return
             searchmsg = await event.reply(f"Searching for {song_name}")
-            data = await meta_data(song_name, chat_id)
+            data = await meta_data(song_name, "m4a", chat_id)
             await searchmsg.delete()
             META_DATA = await zhunehra.send_file(
                 chat_id,

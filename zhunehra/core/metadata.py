@@ -6,19 +6,31 @@ cookie = "cookie/cookie.txt"
 async def is_youtube_url(text):
     return text.startswith("http://") or text.startswith("https://")
     
-async def meta_data(song_name, chat_id):
+async def meta_data(song_name, format, chat_id):
     title = "Unknown Title"
     artist = "Unknown Artist"
+    url = "url"
     raw_duration = 0
     display_duration = "0:00"
     thumbnail = f"db/thumb_{chat_id}"
-    options = {
-        "quiet": True,
-        "cookiefile": cookie,
-        "skip_download": True,
-        "writethumbnail": True,
-        "outtmpl": thumbnail
-    }
+    if format == "m4a":
+        options = {
+            "format": "bestaudio/best",
+            "quiet": True,
+            "cookiefile": cookie,
+            "skip_download": True,
+            "writethumbnail": True,
+            "outtmpl": thumbnail
+        }
+    else:
+        options = {
+            "format": "best",
+            "quiet": True,
+            "cookiefile": cookie,
+            "skip_download": True,
+            "writethumbnail": True,
+            "outtmpl": thumbnail
+        }
 
     with YoutubeDL(options) as ydl:
         try:
@@ -29,6 +41,7 @@ async def meta_data(song_name, chat_id):
                 raise Exception("No results found for the query.")
             
             info = entries[0]
+            url = info.get("url")
             title = info.get("title", "Unknown Title")
             artist = info.get("uploader", "Unknown Artist")
             raw_duration = info.get("duration", 0)
@@ -68,5 +81,5 @@ async def meta_data(song_name, chat_id):
         minutes, secs = divmod(raw_duration, 60)
         display_duration = f"{minutes}:{secs:02}"
 
-    data = [title, artist, display_duration, final_thumbnail]
+    data = [url, title, artist, display_duration, final_thumbnail]
     return data

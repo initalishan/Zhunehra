@@ -1,6 +1,5 @@
 from zhunehra.core.module_injector import *
 from zhunehra.core.play import Play_Audio
-from zhunehra.core.download import download
 from zhunehra.core.metadata import meta_data
 from zhunehra.utils.play import play_buttons
 from zhunehra.utils.queue import queue_buttons
@@ -23,16 +22,16 @@ async def add_to_queue(song_name, chat_id, format, mention):
 
         try:
             queues[chat_id].append((song_name, mention, format))
+            data = await meta_data(song_name, format, chat_id)
+            url, title, artist, duration_text, thumbnail = data
             if len(queues[chat_id]) == 1:
-                path = await download(song_name, format, chat_id)
-                await Play_Audio(chat_id, path)
+                await Play_Audio(chat_id, url)
                 await Call.change_volume_call(chat_id, 200)
-                await playing_message(song_name, chat_id, mention)
-                if os.path.exists(path):
-                    os.remove(path)
+                
+                await playing_message(title, artist, duration_text, thumbnail, chat_id, mention)
             else:
                 queue_position[chat_id] += 1
-                await queue_message(song_name, chat_id, queue_position[chat_id], mention)
+                await queue_message(title, artist, duration_text, thumbnail, chat_id, queue_position[chat_id], mention)
         except Exception as e:
             await zhunehra.send_message(chat_id, f"Error: {str(e)}")
         finally:
@@ -60,11 +59,10 @@ async def play_next(chat_id):
         
         try:
             song_name, mention, format = queues[chat_id][index]
-            path = await download(song_name, format, chat_id)
-            await Play_Audio(chat_id, path)
-            await playing_message(song_name, chat_id, mention)
-            if os.path.exists(path):
-                os.remove(path)
+            data = await meta_data(song_name, format,  chat_id)
+            url, title, artist, duration_text, thumbnail = data
+            await Play_Audio(chat_id, url)
+            await playing_message(title, artist, duration_text, thumbnail, chat_id, mention)
         except Exception as e:
             await zhunehra.send_message(chat_id, f"Error: {str(e)}")
 
@@ -75,9 +73,7 @@ async def stream_end(_, update: Update):
     if chat_id in queues:
         await play_next(chat_id)
         
-async def playing_message(song_name, chat_id, mention):
-    data = await meta_data(song_name, chat_id)
-    title, artist, duration_text, thumbnail = data
+async def playing_message(title, artist, duration_text, thumbnail, chat_id, mention):
     await zhunehra.send_file(
         chat_id,
         file=thumbnail,
@@ -87,9 +83,7 @@ async def playing_message(song_name, chat_id, mention):
     if thumbnail != "db/zhunehra.png" and os.path.exists(thumbnail):
         os.remove(thumbnail)
 
-async def queue_message(song_name, chat_id, queue_pos, mention):
-    data = await meta_data(song_name, chat_id)
-    title, artist, duration_text, thumbnail = data
+async def queue_message(title, artist, duration_text, thumbnail, chat_id, queue_pos, mention):
     await zhunehra.send_message(
         chat_id,
         f"**Added to queue:**\n\n**Title:** {title}\n**Artist:** {artist}\n**Duration:** {duration_text}\n**Requested by:** {mention}\n**Queue Position:** #{queue_pos}",
@@ -112,14 +106,12 @@ async def replay(event):
         index = current_ind.get(chat_id, 0)
         song_name, requested_by, format = queues[chat_id][index]
         try:
-            path = await download(song_name, format, chat_id)
-            await Play_Audio(chat_id, path)
-            await playing_message(song_name, chat_id, requested_by)
+            data = await meta_data(song_name, format, chat_id)
+            url, title, artist, duration_text, thumbnail = data
+            await Play_Audio(chat_id, url)
+            await playing_message(title, artist, duration_text, thumbnail, chat_id, requested_by)
             await status.edit(f"**Replay Started!**\n\n**Requested by:** {mention}")
         except Exception as e:
             await status.edit(f"Replay failed: {str(e)}")
-        finally:
-            if os.path.exists(path):
-                os.remove(path)
     else:
         await event.reply(f"**Nothing is playing to replay,** {mention}.")
