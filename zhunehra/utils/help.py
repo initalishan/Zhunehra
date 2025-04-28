@@ -15,15 +15,16 @@ help_buttons = [
 commands_button = [
     [
         Button.inline("Play", data=b"play_command"),
-        Button.inline("Stop", data=b"stop_command"),
-        Button.inline("Skip", data=b"skip_command")
+        Button.inline("Vplay", data=b"vplay_command"),
+        Button.inline("Stop", data=b"stop_command")
     ],
     [
+        Button.inline("Skip", data=b"skip_command"),
         Button.inline("Pause", data=b"pause_command"),
-        Button.inline("Resume", data=b"resume_command"),
-        Button.inline("Replay", data=b"replay_command")
+        Button.inline("Resume", data=b"resume_command")
     ],
     [
+        Button.inline("Replay", data=b"replay_command"),
         Button.inline("Download", data=b"download_command")
     ],
     [

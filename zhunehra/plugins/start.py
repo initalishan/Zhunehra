@@ -27,14 +27,14 @@ class start:
         except Exception:
             pass
         global start_caption
-        sender = await event.get_sender()
-        sender_id = event.sender.id or "Anonymous"
-        username = sender.username or "Anonymous"
-        first_name = sender.first_name or ""
-        last_name = sender.last_name or ""
-        full_name = (first_name + " " + last_name).strip()
         status = await event.respond("👀")
         if event.is_private:
+            sender = await event.get_sender()
+            sender_id = event.sender.id or "Anonymous"
+            username = sender.username or "Anonymous"
+            first_name = sender.first_name or ""
+            last_name = sender.last_name or ""
+            full_name = (first_name + " " + last_name).strip()
             safe_data = SafeDict(
                 username=username,
                 first_name=first_name,

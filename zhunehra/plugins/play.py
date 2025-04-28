@@ -21,7 +21,7 @@ class Play:
         try:
             mention = f"[{user.first_name}](tg://user?id={user.id})"
         except Exception:
-            mention = "anonymous"
+            mention = "Anonymous"
         if not event.is_group:
             return await event.reply("This command works only in groups.")
         song_name = event.pattern_match.group(1)

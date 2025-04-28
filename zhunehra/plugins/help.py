@@ -67,6 +67,12 @@ async def play_button_callback(event):
         play_command_caption,
         buttons=back_to_commands_button
     )
+@zhunehra.on(events.CallbackQuery(data=b"vlay_command"))
+async def vplay_button_callback(event):
+    await event.edit(
+        vplay_command_caption,
+        buttons=back_to_commands_button
+    )
 @zhunehra.on(events.CallbackQuery(data=b"stop_command"))
 async def stop_button_callback(event):
     await event.edit(

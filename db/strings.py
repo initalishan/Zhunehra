@@ -14,6 +14,8 @@ about_zhunehra_caption="**Zhunehra Bot Details.**\n\n**Libraries:**\n[PyTgCalls]
 
 play_command_caption="**/play Command.**\n\nUse this command to play music in your group voice chat.\n\n**Usage:**\n`/play song name`\n`/play Youtube link`\n`/play Spotify link`\n\n**Group Only:**  \nThis command works only inside a group where the bot is added.\n\nExample:\n`/play Alone by Alan Walker`\n`/play https://youtu.be/somevideoid`\n\nEnjoy seamless music streaming with Zhunehra!."
 
+vplay_command_caption="**/vplay Command.**\n\nStream videos directly in your group's voice chat with this command.\n\n**Usage:**\n`/vplay song name`\n`/vplay Youtube link`\n\n**Group Only:**\nThis command works only inside a group where the bot is present.\n\nExample:\n`/vplay Faded by Alan Walker`\n`/vplay https://youtu.be/somevideoid`\n\nEnjoy high-quality video streaming with Zhunehra!."
+
 stop_command_caption="**/stop Command.**\n\nUse this command to stop all the music playing in the group voice chat and clear the queue.\n\n**Usage:**\n`/stop`\n`/end`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/stop`\n`/end`\n\nThis will immediately end the music session for the group."
 
 skip_command_caption="**/skip Command.**\n\nUse this command to skip the currently playing song in the group voice chat and move to the next song in the queue.\n\n**Usage:**\n`/skip`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/skip`\n\nThis will immediately skip the current track and start playing the next one, if available."
