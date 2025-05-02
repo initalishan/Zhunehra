@@ -4,3 +4,4 @@ venv
 __pycache__
 zhunehra.session
 zhunehra.session-journal
+cookies.txt

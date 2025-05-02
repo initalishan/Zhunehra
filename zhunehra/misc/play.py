@@ -1,8 +1,10 @@
-from zhunehra.core.module_injector import *
 from pytgcalls.types import AudioQuality, MediaStream
+from zhunehra.core import clients
+
+music = clients.music
 
 async def Play_Audio(chat_id, path):
-    await Call.play(
+    await music.play(
         chat_id,
         stream=MediaStream(
             path,

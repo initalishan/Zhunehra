@@ -1,15 +1,14 @@
-from zhunehra.core.module_injector import *
+from zhunehra.core import clients
+from zhunehra.core.safedict import SafeDict
 from zhunehra.utils.help import *
 from zhunehra.utils.start import start_buttons
 from db.strings import *
+from telethon import events
 
-
-class SafeDict(dict):
-    def __missing__(self, key):
-        return key
+zhunehra = clients.zhunehra
 
 @zhunehra.on(events.CallbackQuery(data=b"help_menu"))
-async def help_callback(event):
+async def Help_Callback(event):
     await event.edit(
         help_caption,
         buttons=help_buttons

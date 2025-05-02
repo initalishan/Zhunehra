@@ -1,12 +1,15 @@
-from zhunehra.core.module_injector import *
-from zhunehra.core.play import Play_Audio
-from zhunehra.core.metadata import meta_data
+from zhunehra.misc.play import Play_Audio
+from zhunehra.core import clients
+from zhunehra.misc.metadata import meta_data
 from zhunehra.utils.play import play_buttons
 from zhunehra.utils.queue import queue_buttons
 from pytgcalls import filters
 from pytgcalls.types import Update
 import os
 from asyncio import Lock
+
+music = clients.music
+zhunehra = clients.zhunehra
 
 queue_lock = Lock()
 queues = {}  
@@ -26,7 +29,7 @@ async def add_to_queue(song_name, chat_id, format, mention):
             url, title, artist, duration_text, thumbnail = data
             if len(queues[chat_id]) == 1:
                 await Play_Audio(chat_id, url)
-                await Call.change_volume_call(chat_id, 200)
+                await music.change_volume_call(chat_id, 200)
                 
                 await playing_message(title, artist, duration_text, thumbnail, chat_id, mention)
             else:
@@ -40,7 +43,7 @@ async def add_to_queue(song_name, chat_id, format, mention):
 async def play_next(chat_id):
     async with queue_lock:
         if chat_id not in queues or not queues[chat_id]:
-            await Call.leave_call(chat_id)
+            await music.leave_call(chat_id)
             await zhunehra.send_message(chat_id, "**Queue finished,** Leaving voice chat.")
             queues.pop(chat_id, None)
             queue_position.pop(chat_id, None)
@@ -50,7 +53,7 @@ async def play_next(chat_id):
         current_ind[chat_id] += 1
         index = current_ind[chat_id]
         if index >= len(queues[chat_id]):
-            await Call.leave_call(chat_id)
+            await music.leave_call(chat_id)
             await zhunehra.send_message(chat_id, "**Queue finished,** Leaving voice chat.")
             queues.pop(chat_id, None)
             queue_position.pop(chat_id, None)
@@ -66,7 +69,7 @@ async def play_next(chat_id):
         except Exception as e:
             await zhunehra.send_message(chat_id, f"Error: {str(e)}")
 
-@Call.on_update(filters.stream_end())
+@music.on_update(filters.stream_end())
 async def stream_end(_, update: Update):
     chat = update.chat_id
     chat_id = int(f"-100{chat}" if not str(chat).startswith("-100") else chat)

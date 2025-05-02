@@ -1,8 +1,7 @@
 from yt_dlp import YoutubeDL
-from PIL import Image
 import os
 
-cookie = "cookie/cookie.txt"
+cookie = "cookies/cookies.txt"
 async def is_youtube_url(text):
     return text.startswith("http://") or text.startswith("https://")
     
@@ -12,15 +11,15 @@ async def meta_data(song_name, format, chat_id):
     url = "url"
     raw_duration = 0
     display_duration = "0:00"
-    thumbnail = f"db/thumb_{chat_id}"
+    thumbnail_path = f"db/thumb_{chat_id}.png"
     if format == "m4a":
         options = {
-            "format": "bestaudio/best",
+            "format": "bestaudio[ext=m4a]/bestaudio/best",
             "quiet": True,
             "cookiefile": cookie,
             "skip_download": True,
             "writethumbnail": True,
-            "outtmpl": thumbnail
+            "outtmpl": thumbnail_path
         }
     else:
         options = {
@@ -29,18 +28,17 @@ async def meta_data(song_name, format, chat_id):
             "cookiefile": cookie,
             "skip_download": True,
             "writethumbnail": True,
-            "outtmpl": thumbnail
+            "outtmpl": thumbnail_path
         }
 
     with YoutubeDL(options) as ydl:
         try:
             query = song_name if await is_youtube_url(song_name) else f"ytsearch:{song_name}"
             result = ydl.extract_info(query, download=True)
-            entries = result.get("entries", [])
-            if not entries:
-                raise Exception("No results found for the query.")
-            
-            info = entries[0]
+            if 'entries' in result:
+                info = result['entries'][0]
+            else:
+                info = result
             url = info.get("url")
             title = info.get("title", "Unknown Title")
             artist = info.get("uploader", "Unknown Artist")
@@ -53,25 +51,8 @@ async def meta_data(song_name, format, chat_id):
         except Exception as e:
             print(f"[Metadata Error] {e}")
 
-    path = f"{thumbnail}.webp"
-    final_thumbnail = "db/zhunehra.png"
-
-    try:
-        if os.path.exists(path):
-            img = Image.open(path)
-            final_thumbnail = path.replace(".webp", ".png")
-            img.save(final_thumbnail, "PNG")
-        else:
-            fallback_jpg = f"db/thumb_{chat_id}.jpg"
-            if os.path.exists(fallback_jpg):
-                final_thumbnail = fallback_jpg
-    except Exception as e:
-        print(f"[Thumbnail Error] {e}")
-    try:
-        if os.path.exists(f"db/thumb_{chat_id}.webp"):
-            os.remove(f"db/thumb_{chat_id}.webp")
-    except Exception as e:
-        print(f"[Cleanup Error] {e}")
+    if not os.path.exists(thumbnail_path):
+        thumbnail_path = "db/zhunehra.png"
 
     if raw_duration >= 3600:
         hours, remainder = divmod(raw_duration, 3600)
@@ -81,5 +62,5 @@ async def meta_data(song_name, format, chat_id):
         minutes, secs = divmod(raw_duration, 60)
         display_duration = f"{minutes}:{secs:02}"
 
-    data = [url, title, artist, display_duration, final_thumbnail]
+    data = [url, title, artist, display_duration, thumbnail_path]
     return data

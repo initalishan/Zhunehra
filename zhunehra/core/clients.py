@@ -9,8 +9,6 @@ api_id = int(environ["api_id"])
 api_hash = environ["api_hash"]
 bot_token = environ["bot_token"]
 string_session = environ["string_session"]
-
 zhunehra = TelegramClient("zhunehra", api_id, api_hash).start(bot_token=bot_token)
-client = TelegramClient(StringSession(string_session), api_id, api_hash)
-Call = PyTgCalls(client)
-Call.start()
+assistant = TelegramClient(StringSession(string_session), api_id, api_hash)
+music = PyTgCalls(assistant)

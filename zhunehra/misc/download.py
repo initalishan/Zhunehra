@@ -1,8 +1,7 @@
 import re
-import os
 from yt_dlp import YoutubeDL
 
-cookie = "cookie/cookie.txt"
+cookie = "cookies/cookies.txt"
 
 async def is_youtube_url(text):
     return text.startswith("http://") or text.startswith("https://")
