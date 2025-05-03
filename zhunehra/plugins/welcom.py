@@ -8,6 +8,30 @@ from os import remove
 
 zhunehra = clients.zhunehra
 
+@zhunehra.on(events.NewMessage(pattern=r"\/welcome\s(.+)"))
+async def toggle_welcome(event):
+    if not event.is_group:
+        return await event.reply("This command only for groups.")
+    sender = await event.get_sender()
+    chat = await event.get_chat()
+    is_admin = await event.client.get_permissions(chat.id, sender.id)
+    if not is_admin.is_admin:
+        return await event.reply("This command only for admins.")
+    cmd = event.pattern_match.group(1)
+    chat_id = event.chat_id
+    if cmd == "on":
+        if welcome_collection.find_one({"chat_id": chat_id}):
+            return await event.reply("Welcome system already enabled in this group.")
+        welcome_collection.insert_one({"chat_id": chat_id})
+        await event.reply("Welcome system **enabled** for this group.")
+    elif cmd == "off":
+        result = welcome_collection.delete_one({"chat_id": chat_id})
+        if result.deleted_count == 0:
+            return await event.reply("Welcome system is not active in this group.")
+        await event.reply("Welcome system **disabled** for this group.")
+    else:
+        await event.reply("On or off?")
+        
 @zhunehra.on(events.ChatAction)
 async def welcome_leave_handler(event):
     chat_id = event.chat_id
