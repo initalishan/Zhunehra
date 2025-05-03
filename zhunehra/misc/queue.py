@@ -83,7 +83,7 @@ async def playing_message(title, artist, duration_text, thumbnail, chat_id, ment
         caption=f"**{title}**\n\n**Artist:** {artist}\n**Duration:** {duration_text}\n**Requested by:** {mention}",
         buttons=play_buttons
     )
-    if thumbnail != "db/zhunehra.png" and os.path.exists(thumbnail):
+    if thumbnail != "config/zhunehra.png" and os.path.exists(thumbnail):
         os.remove(thumbnail)
 
 async def queue_message(title, artist, duration_text, thumbnail, chat_id, queue_pos, mention):
@@ -93,14 +93,14 @@ async def queue_message(title, artist, duration_text, thumbnail, chat_id, queue_
         buttons=queue_buttons
     )
 
-    if thumbnail != "db/zhunehra.png" and os.path.exists(thumbnail):
+    if thumbnail != "config/zhunehra.png" and os.path.exists(thumbnail):
         os.remove(thumbnail)
 async def replay(event):
     user = await event.get_sender()
     try:
         mention = f"[{user.first_name}](tg://user?id={user.id})"
     except Exception:
-        mention = "ANonymous"
+        mention = "Anonymous"
     chat = await event.get_chat()
     chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
 

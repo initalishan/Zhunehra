@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.messages import ExportChatInviteRequest
 from telethon.tl.functions.channels import GetFullChannelRequest
-from db.strings import start_caption, start_group_caption, user_log_caption, group_log_caption
+from config.strings import start_caption, start_group_caption, user_log_caption, group_log_caption
 
 zhunehra = clients.zhunehra
 load_dotenv()
@@ -41,7 +41,7 @@ async def Start(event):
         formated_start_caption = start_caption.format_map(safe_data)
         await zhunehra.send_file(
             event.chat_id,
-            file="db/zhunehra.png",
+            file="config/zhunehra.png",
             caption=formated_start_caption,
             buttons=start_buttons,
             parse_mode="md"
@@ -58,7 +58,7 @@ async def Start(event):
                 file = await zhunehra.download_media(photo, file="db/sender_profile.png")
                 formated_user_log_caption = user_log_caption.format_map(safe_data)
             else:
-                file = "db/zhunehra.png"
+                file = "config/zhunehra.png"
             await zhunehra.send_file(
                 chat_log,
                 file=file,
@@ -93,7 +93,7 @@ async def Start(event):
             if photo:
                 file = await zhunehra.download_media(photo, file="db/group.png")
             else:
-                file = "db/zhunehra.png"
+                file = "config/zhunehra.png"
             try:
                 result = await zhunehra(ExportChatInviteRequest(chat_id))
                 invite_link = result.link
@@ -111,7 +111,7 @@ async def Start(event):
                 buttons=invite_button,
                 force_document=False
                 )
-            if file != "db/zhunehra.png":
+            if file != "config/zhunehra.png":
                 remove(file)
 @zhunehra.on(events.CallbackQuery(data=b"invite_failed"))
 async def invite_failed_callback(event):

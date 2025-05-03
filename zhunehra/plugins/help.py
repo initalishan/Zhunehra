@@ -2,7 +2,7 @@ from zhunehra.core import clients
 from zhunehra.core.safedict import SafeDict
 from zhunehra.utils.help import *
 from zhunehra.utils.start import start_buttons
-from db.strings import *
+from config.strings import *
 from telethon import events
 
 zhunehra = clients.zhunehra

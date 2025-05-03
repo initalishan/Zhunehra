@@ -36,7 +36,7 @@ async def main():
     print("Starting zhunehra..")
     print("Starting Zhunehra bot..")
     try:
-        await zhunehra.send_message(log_id, "**Zhunehra Started succesfully.**")
+        await zhunehra.send_message(log_id, "**Zhunehra Started.**")
     except Exception:
         return print("Please add Zhunehra to your log group, and make her admin.")
     print("Zhunehra bot started.")
