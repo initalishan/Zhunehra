@@ -17,15 +17,15 @@ async def Thumbnail(thumb_path, title, artist, duration):
     mask_draw.rounded_rectangle([0, 0, 120, 120], radius=20, fill=255)
     thumb.putalpha(mask)
     card.paste(thumb, (20, 20), thumb)
-    title_font = ImageFont.truetype("fonts/TexgyreadventorBold-90Wn.otf", 22)
+    title_font = ImageFont.truetype("fonts/TexgyreadventorBold-90Wn.otf", 20)
     artist_font = ImageFont.truetype("fonts/PoppinsRegular.otf", 17)
     small_font = ImageFont.truetype("fonts/PoppinsRegular.otf", 16)
     zhunehra_font = ImageFont.truetype("fonts/PoppinsRegular.otf", 18)
     draw.text((160, 20), "Zhunehra", font=zhunehra_font, fill="white")
     wrapped_title = wrap(title, width=26)[:2]
     for i, line in enumerate(wrapped_title):
-        draw.text((160, 45 + i * 20), line, font=title_font, fill="white")
-    draw.text((160, 85), artist, font=artist_font, fill=(255, 255, 255, 160))
+        draw.text((160, 40 + i * 20), line, font=title_font, fill="white")
+    draw.text((160, 90), artist, font=artist_font, fill=(255, 255, 255, 160))
     bar_y = 120
     bar_start = 160
     bar_end = card_w - 30

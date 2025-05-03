@@ -9,3 +9,4 @@ client = MongoClient(mongo_url)
 db = client["zhunehra"]
 users_collection = db["users"]
 groups_collection = db["groups"]
+welcome_collection = db["welcome_settings"]

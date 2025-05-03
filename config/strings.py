@@ -27,3 +27,7 @@ resume_command_caption="**/resume Command.**\n\nUse this command to resume the p
 replay_command_caption="**/replay Command.**\n\nUse this command to replay the currently playing song from the beginning in the group voice chat.\n\n**Usage:**\n`/replay`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/replay`\n\nThis will immediately restart the current song from the beginning."
 
 download_command_caption="**/download Command.**\n\nUse this command to fetch download options for a song or video by providing a name or a direct URL.\n\n**Usage:**\n`/download song name`\n`/download YouTube URL`\n\n**Private Only:**\nThis command works only in private chats with the bot.\n\nExample:\n`/download Shape of You by Ed Sheeran`\n`/download https://youtu.be/somevideoid`\n\nAfter sending the command, you will receive two options:\n**Audio** (to download as music) and **Video** (to download as video).\n\nChoose accordingly and enjoy!"
+
+welcome_caption = "**Hey,** {mention}.\n**Welcome to** {group_name}!\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"
+
+left_caption = "**{mention} has left** {group_name}\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"

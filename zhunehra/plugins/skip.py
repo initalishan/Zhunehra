@@ -39,6 +39,9 @@ async def callback_skip(event):
             await event.delete()
         except Exception:
             pass
-        await status.edit(f"**Skiped succesfully.\nSkiped by:** {mention}")
+        try:
+            await status.edit(f"**Skiped succesfully.\nSkiped by:** {mention}")
+        except Exception:
+            await event.reply(f"**Skiped succesfully.\nSkiped by:** {mention}")
     else:
         await event.reply("Zhunehra is not streaming.")
