@@ -1,3 +1,4 @@
+import asyncio
 from zhunehra.core import clients
 from zhunehra.utils.db import users_collection, groups_collection
 from zhunehra.utils.start import *
@@ -13,6 +14,24 @@ from config.strings import start_caption, start_group_caption, user_log_caption,
 zhunehra = clients.zhunehra
 load_dotenv()
 chat_log = int(environ["chat_log"])
+
+import asyncio
+
+async def animated_loading(event, text="Starting Zhunehra"):
+    dots = ["", ".", "..", "..."]
+    msg = await event.respond(f"{text}")
+    prev = ""
+    for i in range(8):
+        await asyncio.sleep(0.3)
+        current = f"{text}{dots[i % 4]}"
+        if current != prev:
+            try:
+                await msg.edit(current)
+                prev = current
+            except Exception:
+                pass
+    return msg
+
     
 @zhunehra.on(events.NewMessage(pattern=r"\/start"))
 async def Start(event):
@@ -23,7 +42,7 @@ async def Start(event):
     except Exception:
         pass
     global start_caption
-    status = await event.respond("👀")
+    status = await animated_loading(event, "Starting Zhunehra")
     if event.is_private:
         sender = await event.get_sender()
         sender_id = event.sender.id or "Anonymous"

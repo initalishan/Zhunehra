@@ -28,6 +28,65 @@ replay_command_caption="**/replay Command.**\n\nUse this command to replay the c
 
 download_command_caption="**/download Command.**\n\nUse this command to fetch download options for a song or video by providing a name or a direct URL.\n\n**Usage:**\n`/download song name`\n`/download YouTube URL`\n\n**Private Only:**\nThis command works only in private chats with the bot.\n\nExample:\n`/download Shape of You by Ed Sheeran`\n`/download https://youtu.be/somevideoid`\n\nAfter sending the command, you will receive two options:\n**Audio** (to download as music) and **Video** (to download as video).\n\nChoose accordingly and enjoy!"
 
-welcome_caption = "**Hey,** {mention}.\n**Welcome to** {group_name}!\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"
+welcome_command_caption="**/welcome command.**\n\nNow Zhunehra can welcome new members in your group.\n\nAlso leave message when someone leaves the group.\n\n**Usage **:\n\n`/welcome on` - To on welcome message in your group.\n\n`/welcome off` - To off welcome message in your group.\n\n**Important** :\nThese commands works only where the Zhunehra bot is added.\n\n**Enjoy with Zhunehra.**"
 
-left_caption = "**{mention} has left** {group_name}\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"
+welcome_caption="**Hey,** {mention}.\n**Welcome to** {group_name}!\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"
+
+left_caption="**{mention} has left** {group_name}\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"
+
+
+truth_and_dare_command_caption="**/truth & /dare command.**\n\n**Usage :**\n`/truth` - To get randome question.\n`/dare` - To get random challenge.\n\n**important :**\nThese commands works only groups, where the Zhunehra us added.\n **Enjoy with Zhunehra.**"
+
+tag_lines = [
+    "kahaan kho gaye ho? 😢",
+    "tumhe yaad kiya jaa raha hai! ❤️",
+    "ab toh online aa jao re baba! 😤",
+    "tumse baat karni thi... 🥺",
+    "reply toh kar do yaar 😭",
+    "tum bin adhura lagta hai group 💔",
+    "jaldi aao sab wait kar rahe hain! ⏳",
+    "mujhe tumhari yaad aa rahi hai 😿",
+    "aaj mausam bada suhana hai... tum aa jao 🌧️",
+    "tere bina party adhoori hai 🥳",
+    "sun na kuch important baat hai 🤫",
+    "arre bhai tu zinda hai na? 😶‍🌫️",
+    "abey uth jaa, group sookh gaya tera bina 😂",
+    "teri entry ka intezaar hai sabko 😎",
+    "tumhara naam leke tag kiya, ab toh aa jao! 🥹",
+    "coffee ho ya gupshup, dono tere bina adhoori hai ☕",
+    "tum offline ho ya humko ignore kar rahe ho? 🤔",
+    "group mein ek jaan hai, wo tu hai! 🫶",
+    "na tu aaye, na maza aaye 💀",
+    "tumhare bina group mein bhoot ghoom rahe hain 👻",
+    "tere jaise dost rare hain, chhup mat ja yaar 😭",
+    "ek baar online toh aake dekh 😳",
+    "main tujhe tag kar raha hoon, tujhe yaad kar raha hoon 🥲",
+    "tere bina group boring lagta hai 💢",
+    "abey aa bhi jaa, tension ho rahi hai 😰",
+    "kaisa lagta hai ignore karke? 😤",
+    "tu aaye bina group mein silence hai 🤐",
+    "tu aaye toh dhamaka ho jaaye 💣",
+    "tag kiya hai, samajh ja pyaar se 😅",
+    "tumse na ho payega ignore 🙃",
+    "tu dikh gaya toh duniya roshan ho gayi 💡",
+    "friendship mein tag allowed hai! 🫂",
+    "group mein aake scene bana do bhai 🔥",
+    "bhai ya behen, aao aur baat cheet ho jaaye 🗣️",
+    "kitne din ho gaye tujhe dekhe? 📅",
+    "har raat tere bina udasi si rehti hai 😞",
+    "group mein comedy ka dose tu hi toh hai 😂",
+    "hum jaise logo ke liye aana zaroori hai 💯",
+    "kya tu bhi bhool gaya humko? 😟",
+    "zindagi mein sab kuch ho sakta hai, tera online aana mushkil hai 😆",
+    "group tera intezar kar raha hai, jaise barsaat ka paani ☔",
+    "tumhare aane se hi toh group mein jaan aati hai 😍",
+    "bhai aa jao, group mein sirf bot active hai 😓",
+    "tag karke thak gaya, ab toh response de de yaar 😩",
+    "tere bina group bejaan sa lagta hai 💔",
+    "tu aaye bina notifications bhi udasi leke aate hain 😔",
+    "tum online ho toh lagta hai festival chal raha ho 🎉",
+    "aaja bhai sab kuch maaf hai 😅",
+    "sach bata, naraaz ho kya? 🥺",
+    "aaja re aaja, tujhe group bula raha hai 🚀",
+    "online aa ja bhai, warna aur tag marunga 😠"
+]

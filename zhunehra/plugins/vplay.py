@@ -16,6 +16,7 @@ assistant_id = int(environ["assistant_id"])
 @zhunehra.on(events.NewMessage(pattern=r"\/vplay(?:@[\w]+)?(?:\s+(.+))?"))
 async def vplay_handler(event):
     global assistant_id
+    return await event.reply("Due to server overload, video streaming is paused for now. Don't worry, we’ll be back soon!.")
     format = "mp4"
     mention = ""
     user = await event.get_sender()

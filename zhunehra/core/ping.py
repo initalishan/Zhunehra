@@ -1,14 +1,15 @@
-import subprocess
+import socket
+import time
 
-def get_ping(host="8.8.8.8"):
+def get_ping(host="8.8.8.8", port=53, timeout=3):
     try:
-        output = subprocess.check_output(
-            ["ping", "-c", "1", host], stderr=subprocess.STDOUT, universal_newlines=True
-        )
-        for line in output.split("\n"):
-            if "time=" in line:
-                ping_time = line.split("time=")[1].split(" ")[0]
-                return f"{ping_time}ms"
-        return "Ping time not found"
-    except subprocess.CalledProcessError:
+        start = time.time()
+        socket.setdefaulttimeout(timeout)
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((host, port))
+        end = time.time()
+        sock.close()
+        ping_time = round((end - start) * 1000, 2)
+        return f"{ping_time}ms"
+    except socket.error:
         return "Ping failed"

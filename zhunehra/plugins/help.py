@@ -108,3 +108,28 @@ async def download_button_callback(event):
         download_command_caption,
         buttons=back_to_commands_button
     )
+@zhunehra.on(events.CallbackQuery(data=b"welcome_command"))
+async def welcome_button_callback(event):
+    await event.edit(
+        welcome_command_caption,
+        buttons=back_to_commands_button
+    )
+    
+@zhunehra.on(events.CallbackQuery(data=b"commands_2"))
+async def commands_2_callback(event):
+    await event.edit(
+        command_caption,
+        buttons=commands_button_2
+    )
+@zhunehra.on(events.CallbackQuery(data=b"back_to_commands_2"))
+async def back_to_commands_2_callback(event):
+    await event.edit(
+        command_caption,
+        buttons=commands_button_2
+    )
+@zhunehra.on(events.CallbackQuery(data=b"truth&dare"))
+async def truth_and_dare_callback(event):
+    await event.edit(
+        truth_and_dare_command_caption,
+        buttons=back_to_commands_2_button
+    )

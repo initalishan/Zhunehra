@@ -25,9 +25,21 @@ commands_button = [
     ],
     [
         Button.inline("Replay", data=b"replay_command"),
-        Button.inline("Download", data=b"download_command")
+        Button.inline("Download", data=b"download_command"),
+        Button.inline("Welcome", data=b"welcome_command")
     ],
     [
+        Button.inline("Back", data=b"back_to_help"),
+        Button.inline("Next", data=b"commands_2")
+    ]
+]
+
+commands_button_2 = [
+    [
+        Button.inline("Truth&dare", data=b"truth&dare")
+    ],
+    [
+        Button.inline("Preview", data=b"commands"),
         Button.inline("Back", data=b"back_to_help")
     ]
 ]
@@ -48,5 +60,10 @@ about_zhunehra_buttons = [
 back_to_commands_button = [
     [
         Button.inline("Back", data=b"back_to_commands")
+    ]
+]
+back_to_commands_2_button = [
+    [
+        Button.inline("Back", data=b"back_to_commands_2")
     ]
 ]
