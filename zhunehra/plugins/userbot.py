@@ -45,10 +45,8 @@ async def on_zhunhera_banned(event):
     if chat_id in pending_check:
         return
     pending_check.add(chat_id)
-    print(f"Voice chat detected in {chat_id}. Waiting 30 minutes...")
     await asyncio.sleep(1800) 
     if chat_id not in queues:
-        print(f"Leaving {chat_id} after 30m. Not in queue.")
         try:
             await assistant(LeaveChannelRequest(chat_id))
         except:
