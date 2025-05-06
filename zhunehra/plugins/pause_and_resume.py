@@ -10,6 +10,12 @@ is_playing = True
 @zhunehra.on(events.NewMessage(pattern=r"\/pause"))
 async def pause_handler(event):
     if event.is_group or event.is_channel:
+        user = await event.get_sender()
+        chat = await event.get_chat()
+        rights = await zhunehra.get_permissions(chat.id, user.id)
+        if not rights.is_admin:
+            await event.reply("You must be an admin to use this.")
+            return
         try:
             await event.delete()
             await pause(event)
@@ -20,6 +26,12 @@ async def pause_handler(event):
     
 @zhunehra.on(events.CallbackQuery(data=b"pause"))
 async def pause_callback(event):
+    user = await event.get_sender()
+    chat = await event.get_chat()
+    rights = await zhunehra.get_permissions(chat.id, user.id)
+    if not rights.is_admin:
+        await event.answer("You must be an admin to use this.", alert=True)
+        return
     await pause(event)
     
 async def pause(event):
@@ -44,6 +56,12 @@ async def pause(event):
 @zhunehra.on(events.NewMessage(pattern=r"\/resume"))
 async def resume_handler(event):
     if event.is_group or event.is_channel:
+        user = await event.get_sender()
+        chat = await event.get_chat()
+        rights = await zhunehra.get_permissions(chat.id, user.id)
+        if not rights.is_admin:
+            await event.reply("You must be an admin to use this.")
+            return
         try:
             await event.delete()
             await resume(event)
@@ -54,6 +72,12 @@ async def resume_handler(event):
     
 @zhunehra.on(events.CallbackQuery(data=b"resume"))
 async def resume_callback(event):
+    user = await event.get_sender()
+    chat = await event.get_chat()
+    rights = await zhunehra.get_permissions(chat.id, user.id)
+    if not rights.is_admin:
+        await event.answer("You must be an admin to use this.", alert=True)
+        return
     await resume(event)
     
 async def resume(event):

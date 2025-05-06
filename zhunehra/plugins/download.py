@@ -28,11 +28,10 @@ async def Download(event):
         await searchmsg.delete()
         META_DATA = await zhunehra.send_file(
             chat_id,
-            file=f"{data[3]}",
-            caption=f"**{data[0]}**\n\n**Artist:** {data[1]}\n**Duration**: {data[2]}",
+            file=f"{data[4]}",
+            caption=f"**{data[1]}**\n\n**Artist:** {data[2]}\n**Duration**: {data[3]}",
             buttons=download_buttons
         )
-        os.remove(data[3])
     else:
         await event.reply("This command works on, only private.")
                 
@@ -45,12 +44,11 @@ async def Download_Audio(event):
     status = await event.respond("Downloading..")
     await META_DATA.delete()
     path = await download(song_name, "m4a", chat_id)
-    os.rename(path, f"db/{data[0]}.m4a")
-    path = f"db/{data[0]}.m4a"
     await status.edit("Uploading..")
-    await zhunehra.send_file(chat_id, file=path, caption=f"**{data[0]}**\n\n**Artist:** {data[1]}\n**Duration**: {data[2]}",buttons=subscribe)
+    await zhunehra.send_file(chat_id, file=path, thumb=data[4], caption=f"**{data[1]}**\n\n**Artist:** {data[2]}\n**Duration**: {data[3]}", buttons=subscribe, supports_streaming=True)
     await status.delete()
     os.remove(path)
+    os.remove(data[4])
             
 @zhunehra.on(events.CallbackQuery(data=b"mp4"))
 async def Download_Video(event):
@@ -61,9 +59,8 @@ async def Download_Video(event):
     status = await event.respond("Downloading..")
     await META_DATA.delete()
     path = await download(song_name, "mp4", chat_id)
-    os.rename(path, f"db/{data[0]}.mp4")
-    path = f"db/{data[0]}.mp4"
     await status.edit("Uploading..")
-    await zhunehra.send_file(chat_id, file=path, caption=f"**{data[0]}**\n\n**Artist:** {data[1]}\n**Duration**: {data[2]}",buttons=subscribe)
+    await zhunehra.send_file(chat_id, file=path, thumb=data[4], caption=f"**{data[1]}**\n\n**Artist:** {data[2]}\n**Duration**: {data[3]}",buttons=subscribe, supports_streaming=True)
     await status.delete()
     os.remove(path)
+    os.remove(data[4])

@@ -1,28 +1,18 @@
-import asyncio
+from asyncio import sleep
 from zhunehra.core import clients
-from zhunehra.utils.db import users_collection, groups_collection
 from zhunehra.utils.start import *
 from zhunehra.core.safedict import SafeDict
-from os import environ, remove
-from telethon import Button, events
-from dotenv import load_dotenv
-from telethon.tl.functions.photos import GetUserPhotosRequest
-from telethon.tl.functions.messages import ExportChatInviteRequest
-from telethon.tl.functions.channels import GetFullChannelRequest
-from config.strings import start_caption, start_group_caption, user_log_caption, group_log_caption
+from telethon import events
+from config.strings import start_caption, start_group_caption
 
 zhunehra = clients.zhunehra
-load_dotenv()
-chat_log = int(environ["chat_log"])
-
-import asyncio
 
 async def animated_loading(event, text="Starting Zhunehra"):
     dots = ["", ".", "..", "..."]
     msg = await event.respond(f"{text}")
     prev = ""
     for i in range(8):
-        await asyncio.sleep(0.3)
+        await sleep(0.3)
         current = f"{text}{dots[i % 4]}"
         if current != prev:
             try:
@@ -32,7 +22,6 @@ async def animated_loading(event, text="Starting Zhunehra"):
                 pass
     return msg
 
-    
 @zhunehra.on(events.NewMessage(pattern=r"\/start"))
 async def Start(event):
     global user_log_caption
@@ -69,25 +58,7 @@ async def Start(event):
             await status.delete()
         except Exception:
             pass
-        if not users_collection.find_one({"user_id": sender_id}):
-            users_collection.insert_one({"user_id": sender_id})
-            photos = await zhunehra(GetUserPhotosRequest(sender_id, offset=0, max_id=0, limit=1))
-            if photos.photos:
-                photo = photos.photos[0]
-                file = await zhunehra.download_media(photo, file="db/sender_profile.png")
-                formated_user_log_caption = user_log_caption.format_map(safe_data)
-            else:
-                file = "config/zhunehra.png"
-            await zhunehra.send_file(
-                chat_log,
-                file=file,
-                caption=formated_user_log_caption,
-                force_document=False
-                    )
-            remove(file)
     else:
-        chat = await event.get_chat()
-        chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
         await event.reply(
             start_group_caption,
             buttons=start_group_buttons
@@ -96,42 +67,3 @@ async def Start(event):
             await status.delete()
         except Exception:
             pass
-        if not groups_collection.find_one({"group_id": chat_id}):
-            groups_collection.insert_one({"group_id": chat_id})
-            full_chat = await zhunehra(GetFullChannelRequest(channel=chat_id))
-            chat = full_chat.full_chat
-            photo = chat.chat_photo
-            full_name = chat.about or "No title found"
-            username = chat.username if hasattr(chat, "username") and chat.username else None
-            safe_data = SafeDict(
-                full_name=full_name,
-                username=username,
-                chat_id=chat_id
-            )
-            formated_group_log_caption = group_log_caption.format_map(safe_data)
-            if photo:
-                file = await zhunehra.download_media(photo, file="db/group.png")
-            else:
-                file = "config/zhunehra.png"
-            try:
-                result = await zhunehra(ExportChatInviteRequest(chat_id))
-                invite_link = result.link
-                invite_button = [
-                    [Button.url("See Group", invite_link)]
-                ]
-            except Exception:
-                invite_button = [
-                    [Button.inline("See Group", data=b"invite_failed")]
-                ]
-            await zhunehra.send_file(
-                chat_log,
-                file=file,
-                caption=formated_group_log_caption,
-                buttons=invite_button,
-                force_document=False
-                )
-            if file != "config/zhunehra.png":
-                remove(file)
-@zhunehra.on(events.CallbackQuery(data=b"invite_failed"))
-async def invite_failed_callback(event):
-    await event.answer("Failed to create invite link because zhunehra is not admin and group is private.")

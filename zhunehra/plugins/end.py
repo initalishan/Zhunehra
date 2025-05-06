@@ -7,6 +7,12 @@ music = clients.music
 @zhunehra.on(events.NewMessage(pattern=r"\/stop"))
 async def Stop(event):
     if event.is_group or event.is_channel:
+        user = await event.get_sender()
+        chat = await event.get_chat()
+        rights = await zhunehra.get_permissions(chat.id, user.id)
+        if not rights.is_admin:
+            await event.reply("You must be an admin to use this.")
+            return
         try:
             await stop_song(event)
         except Exception:
@@ -17,6 +23,12 @@ async def Stop(event):
 @zhunehra.on(events.NewMessage(pattern=r"\/end"))
 async def End(event):
     if event.is_group or event.is_channel:
+        user = await event.get_sender()
+        chat = await event.get_chat()
+        rights = await zhunehra.get_permissions(chat.id, user.id)
+        if not rights.is_admin:
+            await event.reply("You must be an admin to use this.")
+            return
         try:
             await stop_song(event)
         except Exception:
@@ -26,6 +38,12 @@ async def End(event):
 
 @zhunehra.on(events.CallbackQuery(data=b"stop"))
 async def Stop_Callback(event):
+    user = await event.get_sender()
+    chat = await event.get_chat()
+    rights = await zhunehra.get_permissions(chat.id, user.id)
+    if not rights.is_admin:
+        await event.answer("You must be an admin to use this.", alert=True)
+        return
     try:
         await stop_song(event)
     except Exception:

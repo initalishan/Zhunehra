@@ -5,6 +5,7 @@ from zhunehra.core.safedict import SafeDict
 from config.strings import welcome_caption, left_caption
 from zhunehra.core.profile import create_profile_card
 from os import remove
+from zhunehra.core.sudo import sudo_users
 
 zhunehra = clients.zhunehra
 
@@ -15,7 +16,7 @@ async def toggle_welcome(event):
     sender = await event.get_sender()
     chat = await event.get_chat()
     is_admin = await event.client.get_permissions(chat.id, sender.id)
-    if not is_admin.is_admin:
+    if not (is_admin.is_admin or sender.id in sudo_users):
         return await event.reply("This command only for admins.")
     cmd = event.pattern_match.group(1)
     chat_id = event.chat_id
@@ -64,14 +65,16 @@ async def welcome_leave_handler(event):
     elif event.user_left or event.user_kicked:
         caption = left_caption.format_map(safe_data)
         buttons = [Button.url("See User", f"https://t.me/{username}") if username != "N/A" else Button.inline("No Username", b"no_user")]
-
-    await zhunehra.send_file(
-        chat_id,
-        file=profile_card,
-        caption=caption,
-        parse_mode="md",
-        buttons=buttons
-    )
+    try:
+        await zhunehra.send_file(
+            chat_id,
+            file=profile_card,
+            caption=caption,
+            parse_mode="md",
+            buttons=buttons
+        )
+    except Exception:
+        pass
     try:
         remove(profile_card)
     except Exception:

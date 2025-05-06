@@ -11,6 +11,14 @@ help_buttons = [
         Button.inline("Back", data=b"back_to_start")
     ]
 ]
+help_2_buttons = [
+    [
+        Button.inline("Commands", data=b"commands")
+    ],
+    [
+        Button.inline("About Zhunehra", data=b"about_zhunehra")
+    ]
+]
 
 commands_button = [
     [
@@ -36,7 +44,12 @@ commands_button = [
 
 commands_button_2 = [
     [
-        Button.inline("Truth&dare", data=b"truth&dare")
+        Button.inline("Truth&dare", data=b"truth&dare"),
+        Button.inline("Ban", data=b"ban_command"),
+        Button.inline("Mute", data=b"mute_command")
+    ],
+    [
+        Button.inline("Tagall", data=b"tagall_command"),
     ],
     [
         Button.inline("Preview", data=b"commands"),

@@ -14,7 +14,7 @@ async def download(name, format, chat_id):
         options = {
             "format": "bestaudio[ext=m4a]",
             "cookiefile": cookie,
-            "outtmpl": "db/%(title)s.%(ext)s",
+            "outtmpl": "config/%(title)s.%(ext)s",
             "noplaylist": True,
             "quiet": True
         }
@@ -22,7 +22,7 @@ async def download(name, format, chat_id):
         options = {
             "format": "best",
             "cookiefile": cookie,
-            "outtmpl": "db/%(title)s.%(ext)s",
+            "outtmpl": "config/%(title)s.%(ext)s",
             "noplaylist": True,
             "quiet": True
         }

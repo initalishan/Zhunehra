@@ -6,7 +6,8 @@ from zhunehra.utils.queue import queue_buttons
 from pytgcalls import filters
 from pytgcalls.types import Update
 import os
-from asyncio import Lock
+from asyncio import Lock, create_task, sleep
+
 
 music = clients.music
 zhunehra = clients.zhunehra
@@ -16,9 +17,10 @@ queues = {}
 queue_position = {}  
 current_ind = {}
 
+
 async def add_to_queue(song_name, chat_id, format, mention):
     async with queue_lock:
-        status = await zhunehra.send_message(chat_id, "🔎")
+        status = await zhunehra.send_message(chat_id, f"**Searching to for** {song_name}.")
         queues.setdefault(chat_id, [])
         queue_position.setdefault(chat_id, 0)
         current_ind.setdefault(chat_id, 0)
@@ -28,13 +30,14 @@ async def add_to_queue(song_name, chat_id, format, mention):
             data = await meta_data(song_name, format, chat_id)
             url, title, artist, duration_text, thumbnail = data
             if len(queues[chat_id]) == 1:
-                await Play_Audio(chat_id, url)
-                await music.change_volume_call(chat_id, 200)
+                await status.edit("**Founded!** wait my assistant coming to vc.**")
+                create_task(Play_Audio(chat_id, url))
                 
-                await playing_message(title, artist, duration_text, thumbnail, chat_id, mention)
+                create_task(playing_message(title, artist, duration_text, thumbnail, chat_id, mention))
             else:
                 queue_position[chat_id] += 1
-                await queue_message(title, artist, duration_text, thumbnail, chat_id, queue_position[chat_id], mention)
+                await status.edit("**Founded!** adding to queue.**")
+                create_task(queue_message(title, artist, duration_text, thumbnail, chat_id, queue_position[chat_id], mention))
         except Exception as e:
             await zhunehra.send_message(chat_id, f"Error: {str(e)}")
         finally:
@@ -61,11 +64,12 @@ async def play_next(chat_id):
             return
         
         try:
+            queue_position[chat_id] -= 1
             song_name, mention, format = queues[chat_id][index]
             data = await meta_data(song_name, format,  chat_id)
             url, title, artist, duration_text, thumbnail = data
-            await Play_Audio(chat_id, url)
-            await playing_message(title, artist, duration_text, thumbnail, chat_id, mention)
+            create_task(Play_Audio(chat_id, url))
+            create_task(playing_message(title, artist, duration_text, thumbnail, chat_id, mention))
         except Exception as e:
             await zhunehra.send_message(chat_id, f"Error: {str(e)}")
 
@@ -74,7 +78,7 @@ async def stream_end(_, update: Update):
     chat = update.chat_id
     chat_id = int(f"-100{chat}" if not str(chat).startswith("-100") else chat)
     if chat_id in queues:
-        await play_next(chat_id)
+        create_task(play_next(chat_id))
         
 async def playing_message(title, artist, duration_text, thumbnail, chat_id, mention):
     await zhunehra.send_file(
@@ -111,8 +115,8 @@ async def replay(event):
         try:
             data = await meta_data(song_name, format, chat_id)
             url, title, artist, duration_text, thumbnail = data
-            await Play_Audio(chat_id, url)
-            await playing_message(title, artist, duration_text, thumbnail, chat_id, requested_by)
+            create_task(Play_Audio(chat_id, url))
+            create_task(playing_message(title, artist, duration_text, thumbnail, chat_id, requested_by))
             await status.edit(f"**Replay Started!**\n\n**Requested by:** {mention}")
         except Exception as e:
             await status.edit(f"Replay failed: {str(e)}")

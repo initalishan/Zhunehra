@@ -57,7 +57,7 @@ async def ban_handler(event):
     args = event.raw_text.split(maxsplit=2)
     reason = args[2] if len(args) >= 3 else "No reason provided."
 
-    if sender.id not in sudo_users and not await has_ban_permission(chat, sender.id):
+    if not (sender.id in sudo_users or await has_ban_permission(chat, sender.id)):
         return await event.reply("You need **ban rights** to do that!")
 
     if not await has_ban_permission(chat, bot.id):
@@ -84,7 +84,7 @@ async def unban_handler(event):
     if not user_id:
         return await event.reply("Reply to a user or provide a valid username/ID.")
 
-    if not await has_ban_permission(chat, sender.id):
+    if not (sender.id in sudo_users or await has_ban_permission(chat, sender.id)):
         return await event.reply("You need **ban rights** to do that!")
 
     if not await has_ban_permission(chat, bot.id):
@@ -116,7 +116,7 @@ async def mute_handler(event):
     if not user_id:
         return await event.reply("Provide a valid user to mute.")
 
-    if not await has_ban_permission(chat, sender.id):
+    if not (sender.id in sudo_users or await has_ban_permission(chat, sender.id)):
         return await event.reply("You need **ban rights** to mute users.")
 
     if not await has_ban_permission(chat, bot.id):
@@ -165,7 +165,7 @@ async def unmute_handler(event):
     if not user_id:
         return await event.reply("Provide a valid user to unmute.")
 
-    if not await has_ban_permission(chat, sender.id):
+    if not (sender.id in sudo_users or await has_ban_permission(chat, sender.id)):
         return await event.reply("You need **ban rights** to do that!")
 
     if not await has_ban_permission(chat, bot.id):

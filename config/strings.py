@@ -1,42 +1,3 @@
-start_caption="Hey there, [{full_name}](tg://user?id={sender_id}),\n\nWelcome to **[Zhunehra](https://t.me/zhunehra_bot)** your group's personal music DJ.\n\nWith me you can:**\n- Download audio and videos from Youtube using link or name.\n- Play them live in group voice chat.\n- Use powerful commands to control the stream.**\n\nPress the given help button below to get more information."
-
-start_group_caption="**Welcome to Zhunehra!**\n\nA powerful music bot to stream songs and control voice chats easily.\nStay updated with our latest news and report any issues if needed."
-
-user_log_caption="Congratulations.\nNew user started Zhunehra.\n\nUsername: @{username}\nName: {full_name}\nId: {sender_id}"
-
-group_log_caption="Congratulations.\nZhunehra has been added to one more group.\n\nusername: @{username}\nName: {full_name}\nId: {chat_id}"
-help_caption="**Zhunehra's Help Menu**\n\nChoose the category you want to help with **Zhunehra.**\n\nAny problem ask your doubts at **[Zhunehar's Chat](https://t.me/zhunehra_chat)**."
-
-
-command_caption="**Zhunehra's Command Center**.\n\nHere's your complete list of available commands.\n\n**Tap any button below to see details.**"
-
-about_zhunehra_caption="**Zhunehra Bot Details.**\n\n**Libraries:**\n[PyTgCalls](https://github.com/pytgcalls/pytgcalls).\n[yt-dlp](https://github.com/yt-dlp/yt-dlp).\n[Telethon](https://docs.telethon.dev/).\n\n**Built With:**\nPython 3.13.3.\n\n**Main Features:**\nPlay music in group voice chats.\nDownload audio & video from Youtube.\nFast and stable streaming.\n\n**Hosted On:**\nPrivate VPS."
-
-play_command_caption="**/play Command.**\n\nUse this command to play music in your group voice chat.\n\n**Usage:**\n`/play song name`\n`/play Youtube link`\n`/play Spotify link`\n\n**Group Only:**  \nThis command works only inside a group where the bot is added.\n\nExample:\n`/play Alone by Alan Walker`\n`/play https://youtu.be/somevideoid`\n\nEnjoy seamless music streaming with Zhunehra!."
-
-vplay_command_caption="**/vplay Command.**\n\nStream videos directly in your group's voice chat with this command.\n\n**Usage:**\n`/vplay song name`\n`/vplay Youtube link`\n\n**Group Only:**\nThis command works only inside a group where the bot is present.\n\nExample:\n`/vplay Faded by Alan Walker`\n`/vplay https://youtu.be/somevideoid`\n\nEnjoy high-quality video streaming with Zhunehra!."
-
-stop_command_caption="**/stop Command.**\n\nUse this command to stop all the music playing in the group voice chat and clear the queue.\n\n**Usage:**\n`/stop`\n`/end`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/stop`\n`/end`\n\nThis will immediately end the music session for the group."
-
-skip_command_caption="**/skip Command.**\n\nUse this command to skip the currently playing song in the group voice chat and move to the next song in the queue.\n\n**Usage:**\n`/skip`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/skip`\n\nThis will immediately skip the current track and start playing the next one, if available."
-
-pause_command_caption="**/pause Command.**\n\nUse this command to pause the currently playing song in the group voice chat.\n\n**Usage:**\n`/pause`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/pause`\n\nThis will immediately pause the music streaming until you resume it."
-
-resume_command_caption="**/resume Command.**\n\nUse this command to resume the paused song in the group voice chat.\n\n**Usage:**\n`/resume`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/resume`\n\nThis will immediately resume the music that was previously paused."
-
-replay_command_caption="**/replay Command.**\n\nUse this command to replay the currently playing song from the beginning in the group voice chat.\n\n**Usage:**\n`/replay`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/replay`\n\nThis will immediately restart the current song from the beginning."
-
-download_command_caption="**/download Command.**\n\nUse this command to fetch download options for a song or video by providing a name or a direct URL.\n\n**Usage:**\n`/download song name`\n`/download YouTube URL`\n\n**Private Only:**\nThis command works only in private chats with the bot.\n\nExample:\n`/download Shape of You by Ed Sheeran`\n`/download https://youtu.be/somevideoid`\n\nAfter sending the command, you will receive two options:\n**Audio** (to download as music) and **Video** (to download as video).\n\nChoose accordingly and enjoy!"
-
-welcome_command_caption="**/welcome command.**\n\nNow Zhunehra can welcome new members in your group.\n\nAlso leave message when someone leaves the group.\n\n**Usage **:\n\n`/welcome on` - To on welcome message in your group.\n\n`/welcome off` - To off welcome message in your group.\n\n**Important** :\nThese commands works only where the Zhunehra bot is added.\n\n**Enjoy with Zhunehra.**"
-
-welcome_caption="**Hey,** {mention}.\n**Welcome to** {group_name}!\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"
-
-left_caption="**{mention} has left** {group_name}\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"
-
-
-truth_and_dare_command_caption="**/truth & /dare command.**\n\n**Usage :**\n`/truth` - To get randome question.\n`/dare` - To get random challenge.\n\n**important :**\nThese commands works only groups, where the Zhunehra us added.\n **Enjoy with Zhunehra.**"
-
 tag_lines = [
     "kahaan kho gaye ho? 😢",
     "tumhe yaad kiya jaa raha hai! ❤️",
@@ -90,3 +51,25 @@ tag_lines = [
     "aaja re aaja, tujhe group bula raha hai 🚀",
     "online aa ja bhai, warna aur tag marunga 😠"
 ]
+start_caption="Hey there, [{full_name}](tg://user?id={sender_id}),\n\nWelcome to **[Zhunehra](https://t.me/zhunehra_bot)** your group's personal music DJ.\n\nWith me you can:**\n- Download audio and videos from Youtube using link or name.\n- Play them live in group voice chat.\n- Use powerful commands to control the stream.**\n\nPress the given help button below to get more information."
+start_group_caption="**Welcome to Zhunehra!**\n\nA powerful music bot to stream songs and control voice chats easily.\nStay updated with our latest news and report any issues if needed."
+user_log_caption="Congratulations.\nNew user started Zhunehra.\n\nUsername: @{username}\nName: {full_name}\nId: {sender_id}"
+group_log_caption="Congratulations.\nZhunehra has been added to one more group.\n\nusername: @{username}\nName: {full_name}\nId: {chat_id}"
+help_caption="**Zhunehra's Help Menu**\n\nChoose the category you want to help with **Zhunehra.**\n\nAny problem ask your doubts at **[Zhunehar's Chat](https://t.me/zhunehra_chat)**."
+command_caption="**Zhunehra's Command Center**.\n\nHere's your complete list of available commands.\n\n**Tap any button below to see details.**"
+about_zhunehra_caption="**Zhunehra Bot Details.**\n\n**Libraries:**\n[PyTgCalls](https://github.com/pytgcalls/pytgcalls).\n[yt-dlp](https://github.com/yt-dlp/yt-dlp).\n[Telethon](https://docs.telethon.dev/).\n\n**Built With:**\nPython 3.13.3.\n\n**Main Features:**\nPlay music in group voice chats.\nDownload audio & video from Youtube.\nFast and stable streaming.\n\n**Hosted On:**\nPrivate VPS."
+play_command_caption="**/play Command.**\n\nUse this command to play music in your group voice chat.\n\n**Usage:**\n`/play song name`\n`/play Youtube link`\n`/play Spotify link`\n\n**Group Only:**  \nThis command works only inside a group where the bot is added.\n\nExample:\n`/play Alone by Alan Walker`\n`/play https://youtu.be/somevideoid`\n\nEnjoy seamless music streaming with Zhunehra!."
+vplay_command_caption="**/vplay Command.**\n\nStream videos directly in your group's voice chat with this command.\n\n**Usage:**\n`/vplay song name`\n`/vplay Youtube link`\n\n**Group Only:**\nThis command works only inside a group where the bot is present.\n\nExample:\n`/vplay Faded by Alan Walker`\n`/vplay https://youtu.be/somevideoid`\n\nEnjoy high-quality video streaming with Zhunehra!."
+stop_command_caption="**/stop Command.**\n\nUse this command to stop all the music playing in the group voice chat and clear the queue.\n\n**Usage:**\n`/stop`\n`/end`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/stop`\n`/end`\n\nThis will immediately end the music session for the group."
+skip_command_caption="**/skip Command.**\n\nUse this command to skip the currently playing song in the group voice chat and move to the next song in the queue.\n\n**Usage:**\n`/skip`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/skip`\n\nThis will immediately skip the current track and start playing the next one, if available."
+pause_command_caption="**/pause Command.**\n\nUse this command to pause the currently playing song in the group voice chat.\n\n**Usage:**\n`/pause`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/pause`\n\nThis will immediately pause the music streaming until you resume it."
+resume_command_caption="**/resume Command.**\n\nUse this command to resume the paused song in the group voice chat.\n\n**Usage:**\n`/resume`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/resume`\n\nThis will immediately resume the music that was previously paused."
+replay_command_caption="**/replay Command.**\n\nUse this command to replay the currently playing song from the beginning in the group voice chat.\n\n**Usage:**\n`/replay`\n\n**Group Only:**\nThis command works only inside a group where the bot is added.\n\nExample:\n`/replay`\n\nThis will immediately restart the current song from the beginning."
+download_command_caption="**/download Command.**\n\nUse this command to fetch download options for a song or video by providing a name or a direct URL.\n\n**Usage:**\n`/download song name`\n`/download YouTube URL`\n\n**Private Only:**\nThis command works only in private chats with the bot.\n\nExample:\n`/download Shape of You by Ed Sheeran`\n`/download https://youtu.be/somevideoid`\n\nAfter sending the command, you will receive two options:\n**Audio** (to download as music) and **Video** (to download as video).\n\nChoose accordingly and enjoy!"
+welcome_command_caption="**/welcome command.**\n\nNow Zhunehra can welcome new members in your group.\n\nAlso leave message when someone leaves the group.\n\n**Usage **:\n\n`/welcome on` - To on welcome message in your group.\n\n`/welcome off` - To off welcome message in your group.\n\n**Important** :\nThese commands works only where the Zhunehra bot is added.\n\n**Enjoy with Zhunehra.**"
+welcome_caption="**Hey,** {mention}.\n**Welcome to** {group_name}!\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"
+left_caption="**{mention} has left** {group_name}\n\n**Full Name:** {full_name}\n**User ID:** {user_id}\n**Username:** @{username}"
+truth_and_dare_command_caption="**/truth & /dare command.**\n\n**Usage :**\n`/truth` - To get randome question.\n`/dare` - To get random challenge.\n\n**important :**\nThese commands works only groups, where the Zhunehra us added.\n **Enjoy with Zhunehra.**"
+ban_command_caption = "**/ban & /unban Command.**\n\nUse these commands to ban or unban a member from the group.\n\n**Usage:**\nReply to a user's message and type:\n`/ban [reason]` - To ban the user with an optional reason.\n`/unban` - To unban a previously banned user.\n\n**Example:**\n`/ban Spamming links`\n\nThis will ban the user from the group and log the reason if provided.\n\n**Note:** These commands only work in groups where Zhunehra has admin rights.\n\nEnjoy keeping your group clean with Zhunehra!"
+mute_command_caption = "**/mute & /unmute Command.**\n\nUse these commands to mute or unmute a member in the group.\n\n**Usage:**\nReply to a user's message and type:\n`/mute [duration] [reason]` - To mute the user for a specific duration.\n`/unmute` - To unmute the user.\n\n**Duration Formats:**\n- `10m` for 10 minutes\n- `1h` for 1 hour\n- `1d` for 1 day\n\n**Example:**\n`/mute 1h Flooding`\n\nThis will mute the user for 1 hour with reason: Flooding.\n\n**Note:** These commands only work in groups where Zhunehra has admin rights.\n\nHandle spammers effectively with Zhunehra!"
+tagall_command_caption = "**/tagall Command.**\n\nUse this command to tag all members of the group with random fun dialogues.\n\n**Usage:**\n`/tagall` - Zhunehra will start tagging everyone in the group one by one with unique funny lines.\n\n**Example:**\n`/tagall`\n\nThis will make Zhunehra mention every user with random dialogues like:\n- `Oye suno!`\n- `Nikal ke aa ja bhai!`\n- `Zarurat hai teri!`\n\n**Note:** Works only in groups where the bot is added. Avoid spamming and use responsibly.\n\nMake group lively again with Zhunehra!"

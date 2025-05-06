@@ -13,6 +13,12 @@ async def Help_Callback(event):
         help_caption,
         buttons=help_buttons
     )
+@zhunehra.on(events.NewMessage(pattern=r"\/help"))
+async def Help_2_Callback(event):
+    await event.respond(
+        help_caption,
+        buttons=help_2_buttons
+    )
     
 @zhunehra.on(events.CallbackQuery(data=b"commands"))
 async def commands_callback(event):
@@ -131,5 +137,23 @@ async def back_to_commands_2_callback(event):
 async def truth_and_dare_callback(event):
     await event.edit(
         truth_and_dare_command_caption,
+        buttons=back_to_commands_2_button
+    )
+@zhunehra.on(events.CallbackQuery(data=b"ban_command"))
+async def ban_command_callback(event):
+    await event.edit(
+        ban_command_caption,
+        buttons=back_to_commands_2_button
+    )
+@zhunehra.on(events.CallbackQuery(data=b"mute_command"))
+async def mute_command_callback(event):
+    await event.edit(
+        mute_command_caption,
+        buttons=back_to_commands_2_button
+    )
+@zhunehra.on(events.CallbackQuery(data=b"tagall_command"))
+async def tagall_command_callback(event):
+    await event.edit(
+        tagall_command_caption,
         buttons=back_to_commands_2_button
     )

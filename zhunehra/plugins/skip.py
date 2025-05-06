@@ -8,6 +8,11 @@ zhunehra = clients.zhunehra
 async def skip_handler(event):
     if event.is_group or event.is_channel:
         user = await event.get_sender()
+        chat = await event.get_chat()
+        rights = await zhunehra.get_permissions(chat.id, user.id)
+        if not rights.is_admin:
+            await event.reply("You must be an admin to use this.")
+            return
         try:
             mention = f"[{user.first_name}](tg://user?id={user.id})"
         except Exception:
@@ -30,6 +35,11 @@ async def skip_handler(event):
 @zhunehra.on(events.CallbackQuery(data=b"skip"))
 async def callback_skip(event):
     user = await event.get_sender()
+    chat = await event.get_chat()
+    rights = await zhunehra.get_permissions(chat.id, user.id)
+    if not rights.is_admin:
+        await event.answer("You must be an admin to use this.", alert=True)
+        return
     mention = f"[{user.first_name}](tg://user?id={user.id})"
     chat_id = event.chat_id
     status = await event.reply("**Skiping..**")
