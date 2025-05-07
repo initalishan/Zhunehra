@@ -1,6 +1,7 @@
 from zhunehra.core import clients
 from telethon import events
 from zhunehra.misc.queue import replay
+from asyncio import create_task
 
 zhunehra = clients.zhunehra
 
@@ -13,7 +14,7 @@ async def replay_handler(event):
         await event.reply("You must be an admin to use this.")
         return
     if event.is_group or event.is_channel:
-    	await replay(event)
+    	create_task(replay(event))
     else:
         await event.reply("This command works on, Only groups aur channel")
     
@@ -26,6 +27,6 @@ async def replay_callback(event):
         await event.answer("You must be an admin to use this.", alert=True)
         return
     if event.is_group or event.is_channel:
-    	await replay(event)
+    	create_task(replay(event))
     else:
         await event.reply("This command works on, Only groups aur channel")

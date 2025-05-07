@@ -6,6 +6,7 @@ from telethon.errors import UserNotParticipantError, ChatAdminRequiredError, Use
 from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantBanned, ChatBannedRights
 from telethon import events
 from re import search
+from asyncio import create_task
  
 zhunehra = clients.zhunehra
 assistant = clients.assistant
@@ -62,7 +63,7 @@ async def play_handler(event):
                         invite_code = search(r"(?:joinchat/|\+)([a-zA-Z0-9_-]+)", chat_link).group(1)
                         await assistant(ImportChatInviteRequest(invite_code))
                         await assistant.send_message(chat_id, "I unbanned!, Ready?, I am comming to vc.")
-                        await add_to_queue(song_name, chat_id, format, mention)
+                        create_task(add_to_queue(song_name, chat_id, format, mention))
                     else:
                         return await event.reply("Zhunehra has no access to invite Assistant, Please gibe me (Create Invite Link) Admin rights.")
                 else:
@@ -78,7 +79,7 @@ async def play_handler(event):
             invite_code = search(r"(?:joinchat/|\+)([a-zA-Z0-9_-]+)", chat_link).group(1)
             await assistant(ImportChatInviteRequest(invite_code))
             await assistant.send_message(chat_id, "I joined!, I am comming..")
-            await add_to_queue(song_name, chat_id, format, mention)
+            create_task(add_to_queue(song_name, chat_id, format, mention))
     except UserNotParticipantError:
         try:
             export_link = await zhunehra(ExportChatInviteRequest(chat_id))
@@ -88,6 +89,9 @@ async def play_handler(event):
         invite_code = search(r"(?:joinchat/|\+)([a-zA-Z0-9_-]+)", chat_link).group(1)
         await assistant(ImportChatInviteRequest(invite_code))
         await assistant.send_message(chat_id, "I joined!, I am comming..")
-        await add_to_queue(song_name, chat_id, format, mention)
-    except:
+        create_task(add_to_queue(song_name, chat_id, format, mention))
+    except UserAlreadyParticipantError:
+        create_task(add_to_queue(song_name, chat_id, format, mention))
+    except Exception as e:
+        print(str(e))
         return await event.reply("i have not access to check my assistant in your group or not, Please make your chat history Visable, Convert to (**Super Group**).")

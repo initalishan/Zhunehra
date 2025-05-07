@@ -1,6 +1,7 @@
 from zhunehra.core import clients
 from telethon import events
 from zhunehra.misc.queue import play_next, queues
+from asyncio import create_task
 
 zhunehra = clients.zhunehra
 
@@ -22,7 +23,7 @@ async def skip_handler(event):
         status = await event.reply("**Skiping..**")
         if chat_id in queues and len(queues[chat_id]) > 0:
             try:
-                await play_next(chat_id)
+                create_task(play_next(chat_id))
                 await event.delete()
             except Exception:
                 pass
@@ -45,7 +46,7 @@ async def callback_skip(event):
     status = await event.reply("**Skiping..**")
     if chat_id in queues and len(queues[chat_id]) > 0:
         try:
-            await play_next(chat_id)
+            create_task(play_next(chat_id))
             await event.delete()
         except Exception:
             pass

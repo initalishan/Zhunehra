@@ -2,61 +2,49 @@ from zhunehra.core import clients
 from zhunehra.misc.queue import add_to_queue
 from telethon.tl.functions.channels import GetParticipantRequest, EditBannedRequest, GetFullChannelRequest
 from telethon.tl.functions.messages import ExportChatInviteRequest, ImportChatInviteRequest
-from telethon.errors import UserNotParticipantError, ChatAdminRequiredError
-from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantBanned, ChatBannedRights, InputPeerUser
+from telethon.errors import UserNotParticipantError, ChatAdminRequiredError, UserAlreadyParticipantError
+from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantBanned, ChatBannedRights
 from telethon import events
-from dotenv import load_dotenv
-from os import environ
+from re import search
+from asyncio import create_task
  
 zhunehra = clients.zhunehra
-assistant = clients.assistant 
-load_dotenv()
-assistant_id = int(environ["assistant_id"])
+assistant = clients.assistant
 
 @zhunehra.on(events.NewMessage(pattern=r"\/vplay(?:@[\w]+)?(?:\s+(.+))?"))
-async def vplay_handler(event):
-    global assistant_id
+async def play_handler(event):
+    if event.is_private:
+        return await event.reply("This command work's only groups.")
+    try:
+        await event.delete()
+    except:
+        pass
     return await event.reply("Due to server overload, video streaming is paused for now. Don't worry, we’ll be back soon!.")
+    global assistant
     format = "mp4"
-    mention = ""
     user = await event.get_sender()
     try:
         mention = f"[{user.first_name}](tg://user?id={user.id})"
     except Exception:
         mention = "Anonymous"
-    if event.is_private:
-        return await event.reply("This command works only in groups.")
+    chat = await event.get_chat()
+    chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
+    full_channel = await zhunehra(GetFullChannelRequest(chat_id))
+    call = full_channel.full_chat.call
+    if not call:
+        return await event.reply("Voice chat is not active.")
+    me = await zhunehra.get_me()
+    assistant_entity = await assistant.get_me()
     song_name = event.pattern_match.group(1)
     if not song_name:
         return await event.reply("Please provide a song name or YouTube URL after `/play`.")
     try:
-        await event.delete()
-    except Exception: 
-        pass
-    chat = await event.get_chat()
-    chat_id = int(f"-100{chat.id}" if not str(chat.id).startswith("-100") else chat.id)
-    me = await zhunehra.get_me()
-    try:
-        participant = await zhunehra(GetParticipantRequest(chat_id, me.id))
-        if not isinstance(participant.participant, ChannelParticipantAdmin):
-            return await event.reply("Zhunehra is not an admin in this group.")
-    except UserNotParticipantError:
-        return await event.reply("Zhunehra is not in this group.")
-    except ChatAdminRequiredError:
-        return await event.reply("Zhunehra is not an admin in this group.")
-    try:
-        try:
-            assistant_entity = await zhunehra.get_input_entity(assistant_id)
-        except Exception:
-            assistant_user = await assistant.get_entity(assistant_id)
-            assistant_entity = InputPeerUser(assistant_user.id, assistant_user.access_hash)
-        result = await zhunehra(GetParticipantRequest(chat_id, assistant_entity))
+        result = await zhunehra(GetParticipantRequest(chat_id, assistant_entity.id))
         assistant_status = result.participant
         if isinstance(assistant_status, ChannelParticipantBanned):
-            me = await zhunehra.get_me()
-            owner = await zhunehra(GetParticipantRequest(chat_id, me.id))
-            if isinstance(owner.participant, ChannelParticipantAdmin):
-                admin_rights = owner.participant.admin_rights
+            admin_status = await zhunehra(GetParticipantRequest(chat_id, me.id))
+            if isinstance(admin_status.participant, ChannelParticipantAdmin):
+                admin_rights = admin_status.participant.admin_rights
                 if admin_rights.ban_users:
                     rights = ChatBannedRights(
                         until_date=0,
@@ -69,46 +57,42 @@ async def vplay_handler(event):
                         send_inline=False,
                         embed_links=False,
                     )
-                    await zhunehra(EditBannedRequest(chat_id, assistant_id, rights))
-                    me = await zhunehra.get_me()
-                    try:
-                        participant = await zhunehra(GetParticipantRequest(chat_id, me.id))
-                        if not isinstance(participant.participant, ChannelParticipantAdmin):
-                            return await event.reply("Zhunehra is not an admin in this group.")
-                        admin_rights = participant.participant.admin_rights
-                        if admin_rights.invite_users:
-                            result = await zhunehra(ExportChatInviteRequest(chat_id))
-                            invite_link = result.link
-                            invite_hash = invite_link.split("/")[-1].replace("+", "")
-                            await assistant(ImportChatInviteRequest(invite_hash))
-                            await assistant.send_message(chat_id, "/start@zhunehra_bot")
-                        else:
-                            return await event.reply("Zhunehra can't invite the assistant (no rights).")
-                    except ChatAdminRequiredError:
-                        return await event.reply("Zhunehra is not an admin in this group.")
-                    await event.reply("Assistant was banned, unbanned successfully.")
+                    await zhunehra(EditBannedRequest(chat_id, assistant_entity.id, rights))
+                    if admin_rights.invite_users:
+                        export_link = await zhunehra(ExportChatInviteRequest(chat_id))
+                        chat_link = export_link.link
+                        invite_code = search(r"(?:joinchat/|\+)([a-zA-Z0-9_-]+)", chat_link).group(1)
+                        await assistant(ImportChatInviteRequest(invite_code))
+                        await assistant.send_message(chat_id, "I unbanned!, Ready?, I am comming to vc.")
+                        create_task(add_to_queue(song_name, chat_id, format, mention))
+                    else:
+                        return await event.reply("Zhunehra has no access to invite Assistant, Please gibe me (Create Invite Link) Admin rights.")
                 else:
-                    return await event.reply("Zhunehra has no access to unban the assistant.")
+                    return await event.reply("Zhunehra has no access to unban Assistant, Please gibe me (ban rights).")
+            else:
+                return await event.reply("Zhunehra is not admin, Please gibe me admin with (Create Invite Link) Admin rights.")
+        else:
+            try:
+                export_link = await zhunehra(ExportChatInviteRequest(chat_id))
+            except ChatAdminRequiredError:
+                return await event.reply("Zhunehra is not admin, Please gibe me admin with (Create Invite Link) Admin rights.")
+            chat_link = export_link.link
+            invite_code = search(r"(?:joinchat/|\+)([a-zA-Z0-9_-]+)", chat_link).group(1)
+            await assistant(ImportChatInviteRequest(invite_code))
+            await assistant.send_message(chat_id, "I joined!, I am comming..")
+            create_task(add_to_queue(song_name, chat_id, format, mention))
     except UserNotParticipantError:
         try:
-            me = await zhunehra.get_me()
-            owner = await zhunehra(GetParticipantRequest(chat_id, me.id))
-            if isinstance(owner.participant, ChannelParticipantAdmin):
-                admin_rights = owner.participant.admin_rights
-                if admin_rights.invite_users:
-                    result = await zhunehra(ExportChatInviteRequest(chat_id))
-                    invite_link = result.link
-                    invite_hash = invite_link.split("/")[-1].replace("+", "")
-                    await assistant(ImportChatInviteRequest(invite_hash))
-                    await assistant.send_message(chat_id, "/start@zhunehra_bot")
-                else:
-                    return await event.reply("Zhunehra can't invite the assistant (no rights).")
+            export_link = await zhunehra(ExportChatInviteRequest(chat_id))
         except ChatAdminRequiredError:
-            return await event.reply("Zhunehra is not an admin in this group.")
+            return await event.reply("Zhunehra has no access to invite Assistant, Please gibe me (Create Invite Link) Admin rights.")
+        chat_link = export_link.link
+        invite_code = search(r"(?:joinchat/|\+)([a-zA-Z0-9_-]+)", chat_link).group(1)
+        await assistant(ImportChatInviteRequest(invite_code))
+        await assistant.send_message(chat_id, "I joined!, I am comming..")
+        create_task(add_to_queue(song_name, chat_id, format, mention))
+    except UserAlreadyParticipantError:
+        create_task(add_to_queue(song_name, chat_id, format, mention))
     except Exception as e:
-        return await event.reply(f"Please convert your group to **supergroup** first.")
-    full_channel = await zhunehra(GetFullChannelRequest(chat_id))
-    call = full_channel.full_chat.call
-    if not call:
-        return await event.reply("Voice chat is not active.")
-    await add_to_queue(song_name, chat_id, format, mention)
+        print(str(e))
+        return await event.reply("i have not access to check my assistant in your group or not, Please make your chat history Visable, Convert to (**Super Group**).")

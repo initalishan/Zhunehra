@@ -1,6 +1,5 @@
 from zhunehra.utils.db import users_collection, groups_collection
 from config.strings import user_log_caption, group_log_caption
-from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import ExportChatInviteRequest
 from zhunehra.core import clients
@@ -30,20 +29,12 @@ async def add_user_db(event):
             sender_id=user_id,
         )
         users_collection.insert_one({"user_id": user_id})
-        photos = await zhunehra(GetUserPhotosRequest(user_id, offset=0, max_id=0, limit=1))
-        if photos.photos:
-            photo = photos.photos[0]
-            file = await zhunehra.download_media(photo, file="db/sender_profile.png")
-            formated_user_log_caption = user_log_caption.format_map(safe_data)
-        else:
-            file = "config/zhunehra.png"
-        await zhunehra.send_file(
+        formated_user_log_caption = user_log_caption.format_map(safe_data)
+        await zhunehra.send_message(
             chat_log,
-            file=file,
             caption=formated_user_log_caption,
             force_document=False
                 )
-        remove(file)
         
 async def add_group_db(event):
     chat = await event.get_chat()
@@ -52,8 +43,7 @@ async def add_group_db(event):
         groups_collection.insert_one({"group_id": chat_id})
         full_chat = await zhunehra(GetFullChannelRequest(channel=chat_id))
         chat = full_chat.full_chat
-        photo = chat.chat_photo
-        full_name = chat.about or "No title found"
+        full_name = chat.title
         username = chat.username if hasattr(chat, "username") and chat.username else None
         safe_data = SafeDict(
             full_name=full_name,
@@ -61,10 +51,6 @@ async def add_group_db(event):
             chat_id=chat_id
         )
         formated_group_log_caption = group_log_caption.format_map(safe_data)
-        if photo:
-            file = await zhunehra.download_media(photo, file="db/group.png")
-        else:
-            file = "config/zhunehra.png"
         try:
             result = await zhunehra(ExportChatInviteRequest(chat_id))
             invite_link = result.link
@@ -75,20 +61,17 @@ async def add_group_db(event):
             invite_button = [
                 [Button.inline("See Group", data=b"invite_failed")]
             ]
-        await zhunehra.send_file(
+        await zhunehra.send_message(
             chat_log,
-            file=file,
             caption=formated_group_log_caption,
             buttons=invite_button,
             force_document=False
             )
-        if file != "config/zhunehra.png":
-            remove(file)
         
 @zhunehra.on(events.CallbackQuery(data=b"invite_failed"))
 async def invite_failed_callback(event):
     await event.answer("Failed to create invite link because zhunehra is not admin and group is private.")
-    
+
 @zhunehra.on(events.NewMessage)
 async def logs(event):
     if event.is_private:

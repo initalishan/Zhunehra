@@ -20,7 +20,7 @@ current_ind = {}
 
 async def add_to_queue(song_name, chat_id, format, mention):
     async with queue_lock:
-        status = await zhunehra.send_message(chat_id, f"**Searching to for** {song_name}.")
+        status = await zhunehra.send_message(chat_id, f"**Searching for** {song_name}.")
         queues.setdefault(chat_id, [])
         queue_position.setdefault(chat_id, 0)
         current_ind.setdefault(chat_id, 0)
