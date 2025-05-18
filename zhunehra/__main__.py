@@ -37,20 +37,20 @@ async def main():
     import_plugins()
     print("Starting zhunehra..")
     print("Starting Zhunehra bot..")
-    # try:
-    #     await zhunehra.send_message(log_id, "**Zhunehra Started.**")
-    # except Exception:
-    #     return print("Please add Zhunehra to your log group, and make her admin.")
-    # print("Zhunehra bot started.")
-    # print("Starting zhunehra assistant")
-    # try: 
-    #     #await music.play(log_id, "http://docs.evostream.com/sample_content/assets/sintel1m720p.mp4")
-    #     await assistant.send_message(log_id, "**Zhunehra assistant started.**")
-    # except Exception:
-    #     return print("Please add zhunehra's assistant your log group, and make her admin. And make sure log group voice chat is active")
-    # print("Zhunehra assistant started.")
+    try:
+        await zhunehra.send_message(log_id, "**Zhunehra Started.**")
+    except Exception:
+       return print("Please add Zhunehra to your log group, and make her admin.")
+    print("Zhunehra bot started.")
+    print("Starting zhunehra assistant")
+    try: 
+        await music.play(log_id, "http://docs.evostream.com/sample_content/assets/sintel1m720p.mp4")
+        await assistant.send_message(log_id, "**Zhunehra assistant started.**")
+    except Exception:
+        return print("Please add zhunehra's assistant your log group, and make her admin. And make sure log group voice chat is active")
+    print("Zhunehra assistant started.")
     print("Zhunehra started.")
-    #await music.leave_call(log_id)
+    await music.leave_call(log_id)
     await zhunehra.run_until_disconnected()
     
 def import_plugins():
